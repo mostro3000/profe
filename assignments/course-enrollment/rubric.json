@@ -1,0 +1,77 @@
+{
+  "id": "course-enrollment",
+  "title": "Assignment 3: Course Enrollment",
+  "scale": 10,
+  "criteria": [
+    {
+      "id": "AC1",
+      "title": "Catalog",
+      "text": "The page lists the six courses, each with its name, schedule and number of available seats.",
+      "test": "tests/ac1_catalog_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC2",
+      "title": "Enroll",
+      "text": "Clicking \"Enroll\" on a course with seats adds it to \"My courses\" and decreases its available seats by exactly one.",
+      "test": "tests/ac2_enroll_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC3",
+      "title": "No duplicates",
+      "text": "After enrolling in a course, its button reads \"Enrolled\" and is disabled, and the course appears only once in \"My courses\".",
+      "test": "tests/ac3_no_duplicates_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC4",
+      "title": "Full courses",
+      "text": "A course with 0 seats shows \"Full\" and cannot be enrolled in.",
+      "test": "tests/ac4_full_course_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC5",
+      "title": "Schedule clash",
+      "text": "Enrolling in a course that overlaps one already in \"My courses\" is rejected with a message that names the conflicting course. Seats and \"My courses\" do not change.",
+      "test": "tests/ac5_schedule_clash_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC6",
+      "title": "Drop",
+      "text": "Clicking \"Drop\" removes the course from \"My courses\" and gives its seat back.",
+      "test": "tests/ac6_drop_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC7",
+      "title": "Search",
+      "text": "Typing in the search box filters the catalog by course name, ignoring upper and lower case. Clearing it shows all courses again.",
+      "test": "tests/ac7_search_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC8",
+      "title": "Persistence",
+      "text": "Enrollments and seat counts survive a page reload.",
+      "test": "tests/ac8_persistence_test.md",
+      "points": 1
+    },
+    {
+      "id": "AC9",
+      "title": "No runtime errors",
+      "text": "Using the app never throws an uncaught JavaScript error.",
+      "test": "tests/ac9_no_runtime_errors_test.md",
+      "points": 1
+    }
+  ],
+  "calibration": {
+    "reference": "reference",
+    "mutants": [
+      { "path": "mutants/no-clash-check", "mustFail": ["AC5"] },
+      { "path": "mutants/case-sensitive-search", "mustFail": ["AC7"] }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course Enrollment</title>
+<style>
+:root {
+  --bg: #f6f5f1; --card: #ffffff; --ink: #1f2328; --muted: #5f6368; --line: #e4e2dc;
+  --accent: #7c3aed; --accent-ink: #ffffff; --ok: #137333; --bad: #b3261e; --full: #8a5a00; --full-bg: #fff4d6;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+header, main { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+header { padding-top: 28px; }
+h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.sub { margin: 0 0 20px; color: var(--muted); }
+main { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 24px; padding-bottom: 48px; }
+@media (max-width: 760px) { main { grid-template-columns: 1fr; } }
+h2 { font-size: 1.1rem; margin: 0 0 12px; }
+.search { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.search label { font-size: .85rem; color: var(--muted); }
+.search input { font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
+ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.course { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.course h3 { margin: 0; font-size: 1rem; }
+.meta { color: var(--muted); font-size: .9rem; margin-top: 2px; }
+.badge { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 600; background: var(--full-bg); color: var(--full); vertical-align: middle; }
+button { font: inherit; font-weight: 600; border: 0; border-radius: 10px; padding: 8px 14px; cursor: pointer; background: var(--accent); color: var(--accent-ink); white-space: nowrap; }
+button:disabled { background: #d9d7d0; color: #5f5f5f; cursor: not-allowed; }
+button.drop { background: transparent; color: var(--bad); border: 1px solid currentColor; }
+aside { align-self: start; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+aside .course { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 10px 0; }
+aside .course:last-child { border-bottom: 0; }
+.empty { color: var(--muted); margin: 0; }
+#message { min-height: 1.5em; margin: 0 0 12px; font-weight: 600; }
+#message.error { color: var(--bad); }
+#message.ok { color: var(--ok); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Course Enrollment</h1>
+  <p class="sub">TP3 · Carla · Pick your courses for next semester</p>
+</header>
+<main>
+  <section aria-labelledby="catalog-title">
+    <h2 id="catalog-title">Catalog</h2>
+    <div class="search">
+      <label for="search">Search</label>
+      <input id="search" type="search" placeholder="Search courses" autocomplete="off">
+    </div>
+    <p id="message" role="status" aria-live="polite"></p>
+    <ul id="catalog"></ul>
+  </section>
+  <aside aria-labelledby="mine-title">
+    <h2 id="mine-title">My courses</h2>
+    <ul id="mine"></ul>
+    <p class="empty" id="empty">No courses yet.</p>
+  </aside>
+</main>
+<script>
+const COURSES = [
+  { id: 'prog1', name: 'Programming I', day: 'Mon', start: '08:00', end: '10:00', seats: 3 },
+  { id: 'db', name: 'Databases', day: 'Mon', start: '09:00', end: '11:00', seats: 2 },
+  { id: 'net', name: 'Computer Networks', day: 'Tue', start: '14:00', end: '16:00', seats: 1 },
+  { id: 'os', name: 'Operating Systems', day: 'Wed', start: '10:00', end: '12:00', seats: 4 },
+  { id: 'se', name: 'Software Engineering', day: 'Thu', start: '16:00', end: '18:00', seats: 0 },
+  { id: 'web', name: 'Web Development', day: 'Fri', start: '18:00', end: '20:00', seats: 5 },
+];
+const STORAGE_KEY = 'course-enrollment/v1';
+
+function freshState() {
+  return { enrolled: [], seats: Object.fromEntries(COURSES.map((c) => [c.id, c.seats])) };
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && Array.isArray(saved.enrolled) && saved.seats) return saved;
+  } catch (err) {
+    // Corrupt storage: start over.
+  }
+  return freshState();
+}
+
+function saveState() {
+  // TODO: save to localStorage
+}
+
+let state = loadState();
+let query = '';
+
+const byId = (id) => COURSES.find((c) => c.id === id);
+const minutes = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+const overlaps = (a, b) => a.day === b.day && minutes(a.start) < minutes(b.end) && minutes(b.start) < minutes(a.end);
+const schedule = (c) => `${c.day} ${c.start}–${c.end}`;
+
+function say(text, kind) {
+  const el = document.getElementById('message');
+  el.textContent = text;
+  el.className = kind;
+}
+
+function enroll(id) {
+  const course = byId(id);
+  if (state.enrolled.includes(id)) return say(`You are already enrolled in ${course.name}.`, 'error');
+  if (state.seats[id] <= 0) return say(`${course.name} is full.`, 'error');
+  const clash = state.enrolled.map(byId).find((c) => overlaps(c, course));
+  if (clash) return say(`Schedule clash: ${course.name} overlaps with ${clash.name}.`, 'error');
+  state.enrolled.push(id);
+  state.seats[id] -= 1;
+  saveState();
+  say(`Enrolled in ${course.name}.`, 'ok');
+  render();
+}
+
+function drop(id) {
+  const course = byId(id);
+  state.enrolled = state.enrolled.filter((x) => x !== id);
+  state.seats[id] += 1;
+  saveState();
+  say(`Dropped ${course.name}.`, 'ok');
+  render();
+}
+
+function courseItem(course, action) {
+  const seats = state.seats[course.id];
+  const li = document.createElement('li');
+  li.className = 'course';
+  const info = document.createElement('div');
+  const title = document.createElement('h3');
+  title.textContent = course.name;
+  if (action === 'enroll' && seats === 0) {
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = 'Full';
+    title.append(badge);
+  }
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = action === 'enroll' ? `${schedule(course)} · Seats available: ${seats}` : schedule(course);
+  info.append(title, meta);
+  const button = document.createElement('button');
+  if (action === 'enroll') {
+    const enrolled = state.enrolled.includes(course.id);
+    button.textContent = enrolled ? 'Enrolled' : 'Enroll';
+    button.disabled = enrolled || seats === 0;
+    button.addEventListener('click', () => enroll(course.id));
+  } else {
+    button.textContent = 'Drop';
+    button.className = 'drop';
+    button.addEventListener('click', () => drop(course.id));
+  }
+  li.append(info, button);
+  return li;
+}
+
+function render() {
+  const q = query.trim().toLowerCase();
+  const visible = COURSES.filter((c) => c.name.includes(query.trim()));
+  document.getElementById('catalog').replaceChildren(...visible.map((c) => courseItem(c, 'enroll')));
+  document.getElementById('mine').replaceChildren(...state.enrolled.map(byId).map((c) => courseItem(c, 'drop')));
+  document.getElementById('empty').hidden = state.enrolled.length > 0;
+}
+
+document.getElementById('search').addEventListener('input', (event) => {
+  query = event.target.value;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

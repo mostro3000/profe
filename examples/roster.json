@@ -1,0 +1,9 @@
+{
+  "assignment": "../assignments/course-enrollment",
+  "submissions": [
+    { "student": "Bruno", "app": "submissions/bruno" },
+    { "student": "Carla", "app": "submissions/carla" },
+    { "student": "Diego", "app": "submissions/diego" },
+    { "student": "Elena", "app": "submissions/elena" }
+  ]
+}
