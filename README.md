@@ -59,6 +59,8 @@ profe loop assignments/course-enrollment --app ./my-app --agent "codex exec --ap
 profe loop assignments/course-enrollment --app ./my-app --agent "claude -p --permission-mode acceptEdits"
 ```
 
+In our run, Claude Haiku took a copy of Bruno's app from **7/9 to 9/9 in one round** (17 seconds of agent time). It fixed exactly the two bugs Kane reported. The transcript, the diff and the fixed app are in [`docs/agent-loop/`](docs/agent-loop/README.md).
+
 ## How Profe uses Kane CLI
 
 - **One `kane-cli testrun run` per submission** over the assignment's `_test.md` files, with `--override-start-url` pointing at that student's app. Kane gives each criterion its own isolated Chrome and seals one evidence pack for the whole submission.
@@ -67,6 +69,7 @@ profe loop assignments/course-enrollment --app ./my-app --agent "claude -p --per
 - **DevTools assertions** catch what a screenshot cannot. AC9 fails an app that looks right but throws an uncaught `TypeError` in the console.
 - **Kane's own words in the feedback:** the failing step, Kane's reason, the values it read on the page (`final_state`), and the public Test Manager link to the run.
 - **Calibration with known answers** before any student is graded.
+- **Kane checks Profe itself.** `npm run selftest` serves a generated report and runs [`selftest/dashboard_test.md`](selftest/dashboard_test.md): the grades table, opening the evidence for a failed criterion, export refused until a grade is approved, then approve and export. It passes: [watch the replay](https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84R323W1SKYSK3QM8P5RH6E/dashboard/share/US_HWABAVWRJBXHV40Q8TQL5FE6UM6PN5DZ2FYVLJXFEZCS8KGA0D9M7FZBZWR7N5SJ?type=summary&agentView=true&fqdn=summary-page).
 
 Every criterion in the report links to its run in Test Manager. The share links open without an account and show each step, each assertion and an autoplay of the screenshots.
 

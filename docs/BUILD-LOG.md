@@ -92,6 +92,11 @@ Calibration and grading together cost about 1,630 credits.
 
 Diego's AC9 is the case a screenshot misses. His app looks right after a Drop, and Kane's diagnosis named the exact seeded bug: "the page tries to move focus to something that has already been removed … `Cannot read properties of null (reading 'focus')`".
 
+Two more runs closed the picture:
+
+- **The closed loop, for real.** `profe loop` with Claude Haiku as the student's agent took a copy of Bruno's app from 7/9 to 9/9 in one round. The agent spent 17 seconds and fixed exactly the two bugs Kane reported (see [`agent-loop/`](agent-loop/README.md)).
+- **Kane checks the dashboard.** `npm run selftest` passed: grades table, evidence drill-down, export refused until a grade is approved, then approve and export.
+
 ### Verdicts versus diagnoses
 
 Every verdict was right. One diagnosis was not. For Diego's AC5, Kane blamed "the wrong starting enrollment data … reset Diego's enrollments", when the app had simply accepted a clashing course. A student following that advice would look in the wrong place. Feedback now labels Kane's diagnosis as *a hypothesis to check against the replay*. The verdict and what Kane read on the page are the evidence.
