@@ -6,6 +6,10 @@ Students now hand in web apps written with Claude Code, Cursor or Codex. They *l
 
 Profe turns an assignment's acceptance criteria into plain-English [Kane CLI](https://github.com/LambdaTest/kane-cli) tests, runs them in a real Chrome against every student's app, and proposes a grade **criterion by criterion, with evidence for every point**: screenshots of each step, console and network logs, a public link to watch the run, and a sealed evidence pack. The teacher reviews and approves every grade. Profe never publishes one on its own.
 
+**▶ Demo video (3 min): https://youtu.be/KYnkbGxuA3Y**: Kane CLI grades a student's app in a real Chrome, catches a `TypeError` that never shows on screen, calibrates the grader itself, and a coding agent fixes the app from Kane's feedback.
+
+<a href="https://youtu.be/KYnkbGxuA3Y"><img src="docs/images/demo-video.png" width="640" alt="Watch the 3-minute Profe demo on YouTube"></a>
+
 **Live sample report: https://mostro3000.github.io/profe/** (the dashboard from grading the example class below).
 
 ![The Profe dashboard: five students × nine criteria, each cell a real-browser Kane run, with proposed and final grades and teacher approval](docs/images/dashboard.png)
