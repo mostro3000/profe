@@ -1,0 +1,10 @@
+node_modules/
+# Per-submission Kane workspaces (test copies, recordings, evidence packs).
+.profe/
+# Kane's project-local state when run from the repo root.
+.testmuai/
+# Generated grading reports (a curated sample lives in docs/sample-report/).
+reports/
+profe-feedback.md
+# Claude Code worktrees.
+.claude/worktrees/
