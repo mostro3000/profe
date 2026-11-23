@@ -169,7 +169,9 @@ export function renderHtml(report) {
     const passed = verified.filter((s) => statusOf(s, c.id) === 'passed').length;
     return { ...c, passed, verified: verified.length };
   });
-  const hardest = [...passRates].filter((c) => c.verified).sort((a, b) => a.passed / a.verified - b.passed / b.verified)[0];
+  const failCounts = passRates.map((c) => ({ ...c, failed: c.verified - c.passed })).filter((c) => c.failed > 0);
+  const topFails = failCounts.length ? Math.max(...failCounts.map((c) => c.failed)) : 0;
+  const hardest = failCounts.filter((c) => c.failed === topFails);
 
   const calibrationCard = calibration
     ? calibration.ok
@@ -190,7 +192,7 @@ export function renderHtml(report) {
         })
         .join('');
       return `<tr data-student="${esc(s.student)}" data-email="${esc(s.email ?? '')}">
-  <th scope="row"><a href="#${esc(s.slug)}">${esc(s.student)}</a>${s.needsReview ? ' <span class="flag" title="Some checks could not run">review</span>' : ''}</th>${cells}
+  <th scope="row"><a href="#${esc(s.slug)}">${esc(s.student)}</a>${s.needsReview ? ' <span class="flag" title="Some checks could not run">review</span>' : ''}${s.note ? `<small class="note">${esc(s.note)}</small>` : ''}</th>${cells}
   <td class="num">${fmt(s.grade)}</td>
   <td><input class="final" type="number" inputmode="decimal" min="0" max="${assignment.scale}" step="0.1" value="${fmt(s.grade)}" aria-label="Final grade for ${esc(s.student)}"></td>
   <td><input class="approve" type="checkbox" aria-label="Approve the grade for ${esc(s.student)}"></td>
@@ -257,6 +259,7 @@ tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
 input.final { width: 4.5em; font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
 input.approve { width: 18px; height: 18px; }
 .flag { font-size: .7rem; font-weight: 700; color: var(--warn); background: var(--warn-bg); border-radius: 999px; padding: 1px 7px; }
+small.note { display: block; color: var(--muted); font-weight: 400; font-size: .78rem; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
 .actions button { font: inherit; font-weight: 700; border: 0; border-radius: 10px; padding: 9px 14px; background: var(--accent); color: #fff; cursor: pointer; }
 .actions .hint { color: var(--muted); font-size: .9rem; }
@@ -292,7 +295,15 @@ footer { margin-top: 40px; color: var(--muted); font-size: .9rem; border-top: 1p
 <section class="cards" aria-label="Summary">
   ${card('Average proposed grade', `${fmt(average)}<small>/${assignment.scale}</small>`, `${students.filter((s) => s.failedCount === 0 && !s.needsReview).length} of ${students.length} submissions pass every criterion.`)}
   ${calibrationCard}
-  ${card('Most missed', hardest ? esc(hardest.id) : '–', hardest ? `${esc(hardest.title)}: ${hardest.verified - hardest.passed} of ${hardest.verified} submissions failed it.` : 'Nothing failed.')}
+  ${card(
+    'Most missed',
+    !hardest.length ? '–' : hardest.length <= 3 ? hardest.map((c) => esc(c.id)).join(' · ') : `${hardest.length} criteria`,
+    !hardest.length
+      ? 'Nothing failed.'
+      : hardest.length === 1
+        ? `${esc(hardest[0].title)}: ${topFails} of ${hardest[0].verified} submissions failed it.`
+        : `Each failed by ${topFails} submission(s): ${hardest.map((c) => esc(c.title)).join(', ')}.`,
+  )}
   ${card('Needs your review', String(reviewCount), reviewCount ? 'Some checks could not run. They never count against the student.' : 'Every check produced a verdict.', reviewCount ? 'warn' : '')}
 </section>
 
@@ -388,7 +399,7 @@ function renderStudent(s, assignment) {
   ].join(' · ');
   const infra = s.kane?.infraError ? `<p class="links">⚠️ ${esc(s.kane.infraError)}</p>` : '';
   return `<section class="student" id="${esc(s.slug)}">
-<header><h3>${esc(s.student)}</h3><span class="num">${fmt(s.grade)} / ${assignment.scale}</span><span class="links">${s.passedCount} passed · ${s.failedCount} failed${s.unverifiedCount ? ` · ${s.unverifiedCount} could not run` : ''}</span></header>
+<header><h3>${esc(s.student)}${s.note ? ` <small class="note">${esc(s.note)}</small>` : ''}</h3><span class="num">${fmt(s.grade)} / ${assignment.scale}</span><span class="links">${s.passedCount} passed · ${s.failedCount} failed${s.unverifiedCount ? ` · ${s.unverifiedCount} could not run` : ''}</span></header>
 <p class="links">${links}</p>${infra}
 <ol>${items}</ol>
 </section>`;

@@ -9,7 +9,8 @@
   "scripts": {
     "test": "node --test test/serve.test.mjs test/grade.test.mjs test/report.test.mjs test/loop.test.mjs",
     "seed": "node scripts/seed-examples.mjs",
-    "demo": "node bin/profe.mjs demo"
+    "demo": "node bin/profe.mjs demo",
+    "selftest": "node scripts/selftest.mjs"
   },
   "engines": {
     "node": ">=18.17"

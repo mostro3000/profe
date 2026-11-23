@@ -26,8 +26,9 @@ Usage
                                            only when every criterion passes.
   profe loop <assignment-dir> --app <folder> --agent "<agent command>"
                                            Closed loop: grade, hand the feedback to a coding agent
-                                           (e.g. "codex exec --full-auto" or "claude -p --permission-mode
-                                           acceptEdits"), grade again, until everything passes.
+                                           (e.g. "codex exec --approve-for-me" or "claude -p
+                                           --permission-mode acceptEdits"), grade again, until
+                                           everything passes.
       --rounds <n>                         Agent rounds at most (default 3).
       --commit                             Commit every grade and every agent fix (git).
   profe report <report.json>               Re-render the HTML dashboard from a report.json.

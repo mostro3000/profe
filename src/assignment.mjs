@@ -57,9 +57,9 @@ export function loadRoster(file) {
 }
 
 // A submission's app is a deployed http(s) URL or a folder with an index.html.
-export function resolveSubmission({ student, app, email }, base = process.cwd()) {
+export function resolveSubmission({ student, app, email, note }, base = process.cwd()) {
   if (!student || !app) throw new Error('Each submission needs a "student" and an "app"');
-  const common = { student, email: email ?? null, slug: slugify(student) };
+  const common = { student, email: email ?? null, note: note ?? null, slug: slugify(student) };
   if (/^https?:\/\//i.test(app)) return { ...common, app, url: app };
   const dir = resolve(base, app);
   if (!existsSync(join(dir, 'index.html'))) throw new Error(`${student}: no index.html in ${dir}`);

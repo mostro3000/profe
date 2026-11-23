@@ -161,6 +161,7 @@ export async function gradeSubmission({
     student: label,
     slug,
     email: submission.email ?? null,
+    note: submission.note ?? null,
     app: submission.app ?? url,
     url: submission.url ?? null,
     gradedAt: new Date(startedAt).toISOString(),

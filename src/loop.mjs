@@ -49,6 +49,10 @@ export function runAgent({ command, cwd, prompt, timeoutSec = 900 }) {
 function gitCommit(dir, message) {
   const add = spawnSync('git', ['add', '-A', '.'], { cwd: dir, encoding: 'utf8' });
   if (add.status !== 0) return { ok: false, detail: add.stderr.trim() };
+  // The feedback the agent read is part of the story, even where it is ignored.
+  for (const file of ['profe-feedback.md', 'profe-loop.md']) {
+    if (existsSync(join(dir, file))) spawnSync('git', ['add', '-f', file], { cwd: dir, encoding: 'utf8' });
+  }
   const commit = spawnSync('git', ['commit', '-q', '-m', message, '--', '.'], { cwd: dir, encoding: 'utf8' });
   if (commit.status !== 0) return { ok: false, detail: (commit.stdout + commit.stderr).trim() };
   const rev = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: dir, encoding: 'utf8' });
