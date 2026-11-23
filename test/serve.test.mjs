@@ -29,6 +29,15 @@ test('returns 404 for missing files and refuses to leave the folder', async () =
   }
 });
 
+test('a missing favicon is a quiet 204, not a console error', async () => {
+  const server = await serveStatic(dir);
+  try {
+    assert.equal((await fetch(`${server.url}favicon.ico`)).status, 204);
+  } finally {
+    await server.close();
+  }
+});
+
 test('each server gets its own port (a fresh browser origin per run)', async () => {
   const a = await serveStatic(dir);
   const b = await serveStatic(dir);

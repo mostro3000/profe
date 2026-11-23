@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { loadAssignment, parseStepHeadings, resolveSubmission, slugify } from '../src/assignment.mjs';
-import { calibrate, gradeSubmission, prepareWorkspace, score } from '../src/grade.mjs';
+import { calibrate, classify, gradeSubmission, prepareWorkspace, score } from '../src/grade.mjs';
 import { summarize } from '../src/kane.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -106,6 +106,49 @@ test('calibration flags a test that fails the reference and one that misses a kn
     ['AC4:fails-on-reference', 'AC7:misses-known-bug'],
   );
   assert.equal(result.problems[0].step, 'Check the full course');
+});
+
+const CLOSED = 'Screenshot failed: TargetClosedError: screenshot: Target page, context or browser has been closed';
+
+test('a harness error reported as "failed" is retried, and the retry decides', async () => {
+  const workRoot = scenario({ elena: { 'ac2_enroll_test.md': { status: 'failed', message: CLOSED, flaky: true } } });
+  const submission = resolveSubmission({ student: 'Elena', app: join(root, 'examples', 'submissions', 'elena') });
+  const result = await gradeSubmission({ rubric, submission, workRoot });
+  const ac2 = result.criteria.find((c) => c.id === 'AC2');
+  assert.equal(ac2.status, 'passed');
+  assert.equal(ac2.attempts, 2);
+  assert.equal(result.kane.retried, 1);
+  assert.equal(result.grade, 10);
+});
+
+test('a harness error that persists is unverified, never a fail', async () => {
+  const workRoot = scenario({ elena: { 'ac2_enroll_test.md': { status: 'failed', message: CLOSED } } });
+  const submission = resolveSubmission({ student: 'Elena', app: join(root, 'examples', 'submissions', 'elena') });
+  const result = await gradeSubmission({ rubric, submission, workRoot });
+  assert.equal(result.criteria.find((c) => c.id === 'AC2').status, 'unverified');
+  assert.equal(result.failedCount, 0);
+  assert.equal(result.needsReview, true);
+});
+
+test('classify: only an assertion failure is a fail', () => {
+  assert.equal(classify('failed', 'Checkpoint assertion failed: "the page shows a message"'), 'failed');
+  assert.equal(classify('failed', CLOSED), 'unverified');
+  assert.equal(classify('failed', 'page.goto: net::ERR_CONNECTION_REFUSED'), 'unverified');
+  assert.equal(classify('broken', null), 'unverified');
+  assert.equal(classify('passed', null), 'passed');
+});
+
+test('calibration is strict: a mutant failing a criterion it does not break means a flaky test', async () => {
+  const workRoot = scenario({
+    'mutant-no-clash-check': { 'ac5_schedule_clash_test.md': { status: 'failed', message: 'Databases was enrolled' } },
+    'mutant-case-sensitive-search': {
+      'ac7_search_test.md': { status: 'failed', message: 'WEB found nothing' },
+      'ac9_no_runtime_errors_test.md': { status: 'failed', message: 'Final verification failed: "no uncaught JavaScript exceptions"' },
+    },
+  });
+  const result = await calibrate({ rubric, workRoot });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.problems.map((p) => `${p.criterion}:${p.kind}`), ['AC9:unexpected-fail-on-mutant']);
 });
 
 test('summarize keeps the latest end event per test file', () => {

@@ -237,14 +237,17 @@ function printProgress(event) {
     console.log(`▶ ${event.student}: ${event.url}`);
     return;
   }
+  if (event.kind === 'retry') {
+    console.log(`  ↻ ${event.student} · retrying ${event.files.join(', ')} (a harness error is not the student's fault)`);
+    return;
+  }
   if (event.kind !== 'criterion') return;
   const mark = event.status === 'passed' ? '✓' : event.status === 'failed' ? '✗' : '?';
-  const tail =
-    event.status === 'failed' && event.reason
-      ? ` · ${truncate(oneLine(event.reason), 110)}`
-      : event.status !== 'passed' && event.status !== 'failed'
-        ? ` (${event.status}: does not count, sent to the teacher)`
-        : '';
+  let tail = '';
+  if (event.status === 'failed' && event.reason) tail = ` · ${truncate(oneLine(event.reason), 110)}`;
+  if (event.status === 'unverified') {
+    tail = ` · could not run (${event.kaneStatus}${event.reason ? `: ${truncate(oneLine(event.reason), 80)}` : ''}), does not count`;
+  }
   console.log(`  ${mark} ${event.student} · ${event.criterion} ${event.title}${tail}`);
 }
 

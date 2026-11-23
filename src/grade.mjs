@@ -28,6 +28,19 @@ export function prepareWorkspace({ rubric, slug, label, workRoot }) {
   return { work, testFiles: [...wanted].map((name) => `tests/${name}`) };
 }
 
+// Kane reports some harness problems as a failed step: the browser closed
+// under load, the page never loaded, the DevTools connection dropped. Those say
+// nothing about the student's work, so they count as "unverified" (retried, and
+// never graded) exactly like a broken run.
+const INFRA_FAILURE =
+  /TargetClosedError|Target page, context or browser has been closed|browser has (been )?disconnected|Screenshot failed|CDP endpoint|ECONNREFUSED|net::ERR_|Protocol error|Session closed/i;
+
+export function classify(kaneStatus, message) {
+  if (kaneStatus === 'passed') return 'passed';
+  if (kaneStatus === 'failed' && !(message && INFRA_FAILURE.test(message))) return 'failed';
+  return 'unverified';
+}
+
 export async function gradeSubmission({
   rubric,
   submission,
@@ -35,6 +48,7 @@ export async function gradeSubmission({
   parallel = 3,
   headless = true,
   timeoutSec = 1800,
+  retries = 1,
   onProgress = () => {},
 }) {
   const label = submission.student;
@@ -51,43 +65,69 @@ export async function gradeSubmission({
   }
   onProgress({ kind: 'start', student: label, url });
 
-  let run;
+  // file name -> { end, log, pack, attempt }; a retry only replaces an entry
+  // when it produced a verdict of its own.
+  const outcomes = new Map();
+  const attempts = [];
   try {
-    run = await runTestrun({
-      cwd: work,
-      testFiles,
-      startUrl: url,
-      parallel,
-      headless,
-      timeoutSec,
-      onEvent: (event) => {
-        if (event.type !== 'testrun_member_end' && event.type !== 'testrun_authored_member_end') return;
-        const criterion = byFile.get(basename(event.path));
-        onProgress({
-          kind: 'criterion',
-          student: label,
-          criterion: criterion?.id ?? basename(event.path),
-          title: criterion?.title ?? '',
-          status: event.status,
-          reason: event.failure?.message ?? null,
-          durationS: event.duration_s ?? null,
-        });
-      },
-    });
+    let pending = testFiles;
+    for (let attempt = 0; attempt <= retries && pending.length; attempt++) {
+      if (attempt > 0) onProgress({ kind: 'retry', student: label, attempt, files: pending.map((f) => byFile.get(basename(f))?.id ?? f) });
+      const attemptStart = Date.now();
+      const run = await runTestrun({
+        cwd: work,
+        testFiles: pending,
+        startUrl: url,
+        parallel,
+        headless,
+        timeoutSec,
+        onEvent: (event) => {
+          if (event.type !== 'testrun_member_end' && event.type !== 'testrun_authored_member_end') return;
+          const criterion = byFile.get(basename(event.path));
+          onProgress({
+            kind: 'criterion',
+            student: label,
+            criterion: criterion?.id ?? basename(event.path),
+            title: criterion?.title ?? '',
+            status: classify(event.status, event.failure?.message),
+            kaneStatus: event.status,
+            reason: event.failure?.message ?? null,
+            durationS: event.duration_s ?? null,
+            attempt,
+          });
+        },
+      });
+      const kane = summarize(run.events);
+      attempts.push({ run, kane, startedAt: attemptStart });
+      const packs = memberPacks(kane.summary, work);
+      for (const file of pending) {
+        const name = basename(file);
+        const end = kane.members.get(name);
+        if (!end) continue;
+        outcomes.set(name, { end, log: readMemberLog(end.log_path), pack: packs.get(name) ?? null, attempt });
+      }
+      // Kane never got going (not signed in, no Chrome): retrying won't help.
+      if (kane.members.size === 0) break;
+      pending = pending.filter((file) => {
+        const outcome = outcomes.get(basename(file));
+        return !outcome || classify(outcome.end.status, outcome.end.failure?.message ?? outcome.log.reason) === 'unverified';
+      });
+    }
   } finally {
     await server?.close();
   }
 
-  const kane = summarize(run.events);
-  const packs = memberPacks(kane.summary, work);
+  const { run, kane } = attempts[0];
   const criteria = rubric.criteria.map((criterion) => {
     const file = basename(criterion.testPath);
-    const end = kane.members.get(file);
-    const log = readMemberLog(end?.log_path);
+    const outcome = outcomes.get(file);
+    const end = outcome?.end;
+    const log = outcome?.log ?? {};
     const kaneStatus = end?.status ?? 'missing';
     // Only a real pass or a real fail counts. Anything else (broken, interrupted,
-    // never ran) is "unverified": it goes to the teacher and never costs points.
-    const status = kaneStatus === 'passed' ? 'passed' : kaneStatus === 'failed' ? 'failed' : 'unverified';
+    // a harness error, never ran) is "unverified": it goes to the teacher and
+    // never costs points.
+    const status = classify(kaneStatus, end?.failure?.message ?? log.reason);
     const stepIndex = Number.isInteger(end?.failure?.step_index) ? end.failure.step_index : (log.failedStep ?? null);
     return {
       id: criterion.id,
@@ -106,7 +146,8 @@ export async function gradeSubmission({
       durationS: end?.duration_s ?? null,
       sessionId: end?.session_id ?? null,
       logPath: end?.log_path ?? null,
-      evidencePack: packs.get(file) ?? null,
+      evidencePack: outcome?.pack ?? null,
+      attempts: outcome ? outcome.attempt + 1 : 0,
     };
   });
 
@@ -134,7 +175,8 @@ export async function gradeSubmission({
       evidenceId: kane.evidenceId,
       totals: kane.summary?.totals ?? null,
       overall: kane.done?.overall_status ?? null,
-      errors: kane.errors.map((e) => e.detail ?? e.message ?? e.code).filter(Boolean),
+      retried: attempts.length - 1,
+      errors: attempts.flatMap((a) => a.kane.errors.map((e) => e.detail ?? e.message ?? e.code)).filter(Boolean),
       infraError,
     },
   };
@@ -179,9 +221,13 @@ export async function gradeAll({ submissions, concurrency = 2, ...options }) {
   return mapLimit(submissions, concurrency, (submission) => gradeSubmission({ ...options, submission }));
 }
 
-// "Who grades the grader?" A rubric is calibrated when the reference solution
-// passes every criterion (no student is failed by a broken test) and each
-// known-bad mutant fails the criteria it breaks (the tests actually bite).
+// "Who grades the grader?" A rubric is calibrated when:
+// - the reference solution passes every criterion (no student is failed by a
+//   broken test);
+// - each known-bad mutant fails the criteria it breaks (the tests bite);
+// - and each mutant passes every other criterion, unless the rubric lists it
+//   under mayAlsoFail (a test that fails a nearly-correct app is flaky or
+//   over-strict, and would cost some student a point).
 export async function calibrate({ rubric, concurrency = 2, ...options }) {
   const calibration = rubric.calibration ?? {};
   if (!calibration.reference) throw new Error(`${rubric.id}: rubric.json has no calibration.reference`);
@@ -194,6 +240,7 @@ export async function calibrate({ rubric, concurrency = 2, ...options }) {
     ...(calibration.mutants ?? []).map((mutant) => ({
       role: 'mutant',
       mustFail: mutant.mustFail ?? [],
+      mayAlsoFail: mutant.mayAlsoFail ?? [],
       submission: {
         student: `mutant ${basename(mutant.path)}`,
         slug: `mutant-${basename(mutant.path)}`,
@@ -205,6 +252,7 @@ export async function calibrate({ rubric, concurrency = 2, ...options }) {
   const runs = await mapLimit(jobs, concurrency, async (job) => ({
     role: job.role,
     mustFail: job.mustFail,
+    mayAlsoFail: job.mayAlsoFail ?? [],
     result: await gradeSubmission({ ...options, rubric, submission: job.submission }),
   }));
 
@@ -242,6 +290,20 @@ export async function calibrate({ rubric, concurrency = 2, ...options }) {
           detail: c.summary ?? c.reason,
         });
       }
+    }
+    for (const c of run.result.criteria) {
+      if (run.mustFail.includes(c.id) || run.mayAlsoFail.includes(c.id) || c.status === 'passed') continue;
+      problems.push({
+        criterion: c.id,
+        kind: c.status === 'failed' ? 'unexpected-fail-on-mutant' : 'unverified-on-mutant',
+        mutant: run.result.app,
+        message:
+          c.status === 'failed'
+            ? `${c.id} failed on ${run.result.app}, which only breaks ${run.mustFail.join(', ')}: the test is flaky or too strict.`
+            : `${c.id} could not run on ${run.result.app}.`,
+        detail: c.reason,
+        step: c.failedStepTitle,
+      });
     }
   }
   return { assignment: rubric.id, calibratedAt: new Date().toISOString(), ok: problems.length === 0, problems, runs };

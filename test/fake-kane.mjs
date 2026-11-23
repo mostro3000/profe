@@ -6,7 +6,7 @@
 // Outcomes come from FAKE_KANE_SCENARIO:
 //   { "<workspace slug>": { "<test file name>": { status, message, step_index, observed } } }
 // A slug mapped to "crash" exits with code 2 before running anything.
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
 const args = process.argv.slice(2);
@@ -50,7 +50,13 @@ let failed = 0;
 const authored = [];
 for (const path of files) {
   const name = basename(path);
-  const outcome = outcomes[name] ?? { status: 'passed' };
+  let outcome = outcomes[name] ?? { status: 'passed' };
+  // A "flaky" outcome happens on the first attempt only; the retry passes.
+  const marker = `.fake-attempted-${name}`;
+  if (outcome.flaky) {
+    if (existsSync(marker)) outcome = { status: 'passed' };
+    else writeFileSync(marker, '1');
+  }
   const sessionId = `s-${slug}-${name}`;
   const logPath = join(process.cwd(), `${name}.events.ndjson`);
   const shareUrl = `https://example.test/share/${slug}/${name}`;

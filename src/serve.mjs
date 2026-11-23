@@ -39,6 +39,12 @@ export function serveStatic(dir) {
         info = await stat(file).catch(() => null);
       }
       if (!info?.isFile()) {
+        // Browsers always ask for /favicon.ico. A 404 there shows up as a console
+        // error that has nothing to do with the student's code, so answer 204.
+        if (pathname === '/favicon.ico') {
+          res.writeHead(204).end();
+          return;
+        }
         res.writeHead(404, { 'content-type': 'text/plain' }).end('not found');
         return;
       }
