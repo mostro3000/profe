@@ -59,7 +59,7 @@ profe loop assignments/course-enrollment --app ./my-app --agent "codex exec --ap
 profe loop assignments/course-enrollment --app ./my-app --agent "claude -p --permission-mode acceptEdits"
 ```
 
-In our run, Claude Haiku took a copy of Bruno's app from **7/9 to 9/9 in one round** (17 seconds of agent time). It fixed exactly the two bugs Kane reported. The transcript, the diff and the fixed app are in [`docs/agent-loop/`](docs/agent-loop/README.md).
+In our run, Claude Haiku took a copy of Bruno's app from **7/9 to 9/9 in one round** (17 seconds of agent time). It fixed exactly the two bugs Kane reported. The transcript, the diff and the fixed app are in [`docs/agent-loop/`](docs/agent-loop/README.md). The Codex command above shows the shape of the call; our recorded run used Claude.
 
 ## How Profe uses Kane CLI
 

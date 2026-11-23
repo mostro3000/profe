@@ -23,7 +23,7 @@ The fix is three small changes to the real bugs. It does not special-case the te
 How the agent was set up:
 
 - **Only files.** The agent edits files in the app folder. Kane, the network and the TestMu credentials stay with Profe, outside the agent's sandbox. The agent's prompt tells it not to run the grader itself.
-- **Any agent CLI.** The command is plain text. Codex works the same way, with `--agent "codex exec --approve-for-me"`.
+- **Any agent CLI.** The command is plain text: any CLI that takes a prompt and edits files in its working folder fits, for example `--agent "codex exec --approve-for-me"`. Only the Claude run above was recorded.
 
 Files:
 
