@@ -33,7 +33,11 @@ git clone https://github.com/mostro3000/profe && cd profe
 node bin/profe.mjs demo
 ```
 
-`demo` first calibrates the example rubric, then grades four example submissions and writes `reports/demo/index.html`. Each criterion's test is authored by Kane on its first run, so a full demo on a fresh account takes about 15 minutes and roughly 3,000 credits. Later runs replay the recordings and cost far less. To try it cheaply, grade one student:
+`demo` first calibrates the example rubric, then grades five example submissions and writes `reports/demo/index.html`.
+
+Profe grades one submission at a time with three Chrome workers each, which takes about 4 to 5 minutes per submission. On a fresh account every test is authored by Kane on its first run. Our full demo (three calibration runs plus five students, all authored from scratch) took about 40 minutes and roughly 1,650 credits. Later runs replay the recordings and cost far less.
+
+To try it cheaply, grade one student, or open the [sample report](docs/sample-report/index.html) from our run:
 
 ```bash
 node bin/profe.mjs grade examples/roster.json --only Bruno
@@ -81,6 +85,8 @@ Each of these would have cost some student a point. Profe now refuses to grade u
 1. **Only a real pass or a real fail counts.** A test that could not run (the app was down, the browser crashed) is marked *unverified*. It never costs points, and it sends the grade to the teacher.
 2. **The rubric is calibrated before it grades anyone.** A test that fails the reference solution is a broken test, not a student's mistake.
 3. **Every point has evidence**, and the teacher approves every grade. The dashboard has a "Final" column to override and an "Approve" checkbox. Only approved grades export to `approved-grades.csv`, which imports into a Moodle gradebook.
+4. **Kane's verdict is evidence; its diagnosis is a hypothesis.** In our run every verdict was right. One diagnosis was not: it blamed Diego's AC5 failure on the test's starting data, when the app simply accepted a clashing course. Feedback labels the diagnosis as a hypothesis to check against the replay.
+5. **Evidence packs stay on the teacher's machine.** They include the grader's TestMu account details (email, organization). The public replay links are what you share with students.
 
 ## Write your own assignment
 
@@ -95,9 +101,19 @@ assignments/<id>/
 
 Run `profe calibrate assignments/<id>` until it says "Calibrated", then grade.
 
-## The example
+## The example, and how Kane did
 
-[`assignments/course-enrollment`](assignments/course-enrollment/assignment.md) is a second-year web development assignment: a course-enrollment page with seats, schedule clashes, search and persistence, graded on nine criteria. [`examples/`](examples/README.md) has four submissions with documented, seeded bugs (the answer key), so you can check Profe's verdicts yourself.
+[`assignments/course-enrollment`](assignments/course-enrollment/assignment.md) is a second-year web development assignment: a course-enrollment page with seats, schedule clashes, search and persistence, graded on nine criteria. [`examples/`](examples/README.md) has four submissions with documented, seeded bugs (the answer key) and one built in a single shot by Claude Haiku 5.5 that nobody edited.
+
+| Submission | Proposed grade | Kane failed | The real bug |
+|---|---|---|---|
+| Bruno | 7.8 | AC3, AC6 | seeded: duplicate enrollment; Drop keeps the seat |
+| Carla | 7.8 | AC7, AC8 | seeded: case-sensitive search; nothing persisted |
+| Diego | 7.8 | AC5, AC9 | seeded: no clash check; a `TypeError` after Drop that the screen never shows |
+| Elena | 10 | none | none |
+| Sofi | 10 | none | built in one shot by Claude Haiku 5.5: no failures found |
+
+Kane's verdicts matched the answer key exactly: all six seeded bugs were caught, there were no false failures across 45 checks, and no check needed a retry. The whole report is in [`docs/sample-report/`](docs/sample-report/index.html).
 
 ## Tests
 

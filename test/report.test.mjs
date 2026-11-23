@@ -75,6 +75,14 @@ test('feedback names what failed and tells the coding agent how to re-check', ()
   assert.match(md, /profe check assignments\/course-enrollment --app \./);
 });
 
+test("Kane's diagnosis is labeled as a hypothesis, its verdict is not", () => {
+  const result = fakeResult('Diego', { AC5: { reason: 'Final verification failed: "Databases is not listed"' } });
+  result.criteria.find((c) => c.id === 'AC5').summary = 'The run used the wrong starting enrollment data.';
+  const md = renderFeedback(rubric, result);
+  assert.match(md, /What Kane saw:\*\* Final verification failed/);
+  assert.match(md, /Kane's diagnosis \(a hypothesis: check it against the replay\):\*\* The run used the wrong starting/);
+});
+
 test('unverified checks are explained as not counting against the student', () => {
   const md = renderFeedback(rubric, fakeResult('Carla', { AC8: { status: 'unverified' } }));
   assert.match(md, /never count against you/);

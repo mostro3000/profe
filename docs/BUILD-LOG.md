@@ -74,10 +74,37 @@ The recording of the step "Enroll in Operating Systems" replayed with `actions_e
 
 Recordings authored under cross-talk cannot be trusted. `profe --fresh` now passes Kane's `--author` to re-author every step, and the calibration was re-run from scratch.
 
-## 5. Lessons, now built into Profe
+## 5. Calibrated from scratch, then the class
+
+Calibration was redone with `--fresh` (every step authored again), one testrun at a time. Reference: 9/9. no-clash-check: fails only AC5. case-sensitive-search: fails only AC7. **✓ Calibrated.**
+
+Then the five example submissions were graded one at a time, each in 4 to 5 minutes with three Chrome workers. No check needed a retry:
+
+| Submission | Grade | Kane failed | Answer key |
+|---|---|---|---|
+| Bruno | 7.8 | AC3, AC6 | AC3, AC6 ✓ |
+| Carla | 7.8 | AC7, AC8 | AC7, AC8 ✓ |
+| Diego | 7.8 | AC5, AC9 | AC5, AC9 ✓ |
+| Elena | 10 | none | none ✓ |
+| Sofi (Claude Haiku, one shot) | 10 | none | unknown on purpose |
+
+Calibration and grading together cost about 1,630 credits.
+
+Diego's AC9 is the case a screenshot misses. His app looks right after a Drop, and Kane's diagnosis named the exact seeded bug: "the page tries to move focus to something that has already been removed … `Cannot read properties of null (reading 'focus')`".
+
+### Verdicts versus diagnoses
+
+Every verdict was right. One diagnosis was not. For Diego's AC5, Kane blamed "the wrong starting enrollment data … reset Diego's enrollments", when the app had simply accepted a clashing course. A student following that advice would look in the wrong place. Feedback now labels Kane's diagnosis as *a hypothesis to check against the replay*. The verdict and what Kane read on the page are the evidence.
+
+### What is safe to share
+
+The evidence packs contain the grader's TestMu account details: the account email and organization id in `result.yaml`, and the profile in the logs. Profe's report says so, and the sample report in this repo ships without packs. The public Test Manager replays carry no account email.
+
+## 6. Lessons, now built into Profe
 
 1. A grader needs a grader. The reference solution alone would not have caught either flaky test; strict mutants did.
 2. "Failed" from a browser agent is not always the student's failure. Read why it failed before taking points away.
 3. Put a precondition in its own step. Kane re-verifies each step's whole objective when the step ends.
 4. Check where the browser actually was. Kane's `final_state.url` caught a cross-talk bug that no assertion would have.
 5. A passing replay is not proof of an action. After an infrastructure incident, re-author (`--fresh`) instead of trusting old recordings.
+6. Trust the verdict, check the diagnosis. Show students what failed and what was read on the page; present the root-cause story as a hypothesis.
