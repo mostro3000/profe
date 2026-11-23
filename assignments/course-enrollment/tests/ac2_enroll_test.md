@@ -8,8 +8,11 @@ max_steps: 20
 
 # AC2 Enroll takes exactly one seat
 
+## Check the starting seats
+Verify the course "Operating Systems" shows 4 available seats.
+
 ## Enroll in Operating Systems
-Verify the course "Operating Systems" shows 4 available seats, then click its "Enroll" button.
+Click the "Enroll" button for "Operating Systems".
 
 ## Check the result
 Verify "Operating Systems" is listed under "My courses".

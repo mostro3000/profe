@@ -1,9 +1,10 @@
 {
   "assignment": "../assignments/course-enrollment",
   "submissions": [
-    { "student": "Bruno", "app": "submissions/bruno" },
-    { "student": "Carla", "app": "submissions/carla" },
-    { "student": "Diego", "app": "submissions/diego" },
-    { "student": "Elena", "app": "submissions/elena" }
+    { "student": "Bruno", "app": "submissions/bruno", "note": "seeded bugs" },
+    { "student": "Carla", "app": "submissions/carla", "note": "seeded bugs" },
+    { "student": "Diego", "app": "submissions/diego", "note": "seeded bugs" },
+    { "student": "Elena", "app": "submissions/elena", "note": "seeded: no bugs" },
+    { "student": "Sofi", "app": "submissions/sofi", "note": "one-shot by Claude Haiku 5.5" }
   ]
 }

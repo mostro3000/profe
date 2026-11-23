@@ -1,0 +1,20 @@
+--- examples/submissions/diego/index.html
++++ muse-fixed/index.html
+@@ -106,6 +106,8 @@
+   const course = byId(id);
+   if (state.enrolled.includes(id)) return say(`You are already enrolled in ${course.name}.`, 'error');
+   if (state.seats[id] <= 0) return say(`${course.name} is full.`, 'error');
++  const conflict = state.enrolled.map(byId).find((c) => overlaps(c, course));
++  if (conflict) return say(`Cannot enroll in ${course.name}: schedule overlaps with ${conflict.name}.`, 'error');
+   state.enrolled.push(id);
+   state.seats[id] -= 1;
+   saveState();
+@@ -120,7 +122,7 @@
+   saveState();
+   say(`Dropped ${course.name}.`, 'ok');
+   render();
+-  document.getElementById(`undo-${id}`).focus(); // move focus to the undo link
++  document.getElementById(`undo-${id}`)?.focus();
+ }
+ 
+ function courseItem(course, action) {

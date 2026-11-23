@@ -1,0 +1,31 @@
+--- examples/submissions/bruno/index.html
++++ agent-fixed/index.html
+@@ -104,6 +104,7 @@
+ 
+ function enroll(id) {
+   const course = byId(id);
++  if (state.enrolled.includes(id)) return say(`You are already enrolled in ${course.name}.`, 'error');
+   if (state.seats[id] <= 0) return say(`${course.name} is full.`, 'error');
+   const clash = state.enrolled.map(byId).find((c) => overlaps(c, course));
+   if (clash) return say(`Schedule clash: ${course.name} overlaps with ${clash.name}.`, 'error');
+@@ -116,7 +117,9 @@
+ 
+ function drop(id) {
+   const course = byId(id);
++  if (!state.enrolled.includes(id)) return;
+   state.enrolled = state.enrolled.filter((x) => x !== id);
++  state.seats[id] += 1;
+   saveState();
+   say(`Dropped ${course.name}.`, 'ok');
+   render();
+@@ -142,8 +145,8 @@
+   const button = document.createElement('button');
+   if (action === 'enroll') {
+     const enrolled = state.enrolled.includes(course.id);
+-    button.textContent = 'Enroll';
+-    button.disabled = seats === 0;
++    button.textContent = enrolled ? 'Enrolled' : 'Enroll';
++    button.disabled = enrolled || seats === 0;
+     button.addEventListener('click', () => enroll(course.id));
+   } else {
+     button.textContent = 'Drop';

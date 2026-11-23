@@ -15,6 +15,12 @@ These four are built from the reference solution by [`scripts/seed-examples.mjs`
 
 Regenerate them with `node scripts/seed-examples.mjs`.
 
+## Built by an AI coding agent, untouched
+
+| Submission | How it was made | Known bugs |
+|---|---|---|
+| `sofi` | Claude Haiku 5.5, one shot: it was given only `assignment.md`, in an empty folder outside this repo (so it could not see the reference solution), and asked for a single `index.html`. Nothing was edited afterwards. | Unknown on purpose: this is the "real student" case. Whatever Profe reports is Kane's verdict on code nobody reviewed. |
+
 ## The roster
 
 [`roster.json`](roster.json) lists who submitted what. Each `app` is either a folder with an `index.html` (Profe serves it locally) or a deployed `https://` URL.

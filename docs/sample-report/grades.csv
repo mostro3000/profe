@@ -1,0 +1,6 @@
+student,email,proposed_grade,passed,failed,unverified,needs_review,failed_criteria
+Bruno,,7.8,7,2,0,no,AC3 AC6
+Carla,,7.8,7,2,0,no,AC7 AC8
+Diego,,7.8,7,2,0,no,AC5 AC9
+Elena,,10,9,0,0,no,
+Sofi,,10,9,0,0,no,

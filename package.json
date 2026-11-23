@@ -1,0 +1,20 @@
+{
+  "name": "profe",
+  "version": "0.1.0",
+  "description": "The teaching assistant that actually runs your students' apps: grades web assignments criterion by criterion in a real browser with Kane CLI, with evidence for every point.",
+  "type": "module",
+  "bin": {
+    "profe": "bin/profe.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/serve.test.mjs test/grade.test.mjs test/report.test.mjs test/loop.test.mjs",
+    "seed": "node scripts/seed-examples.mjs",
+    "demo": "node bin/profe.mjs demo",
+    "selftest": "node scripts/selftest.mjs"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "keywords": ["education", "grading", "autograder", "kane-cli", "e2e-testing", "ai-agents"],
+  "license": "MIT"
+}

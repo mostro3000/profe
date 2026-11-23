@@ -1,0 +1,231 @@
+{
+  "assignment": "course-enrollment",
+  "calibratedAt": "2026-11-23T17:13:49.290Z",
+  "ok": true,
+  "problems": [],
+  "summary": {
+    "referencePassed": 9,
+    "referenceTotal": 9,
+    "knownBugsCaught": 2,
+    "knownBugsTotal": 2
+  },
+  "runs": [
+    {
+      "role": "reference",
+      "app": "reference",
+      "mustFail": [],
+      "grade": 10,
+      "criteria": [
+        {
+          "id": "AC1",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KH8VY1V91TJJ7GAZJGX9J/dashboard/share/US_22AWT0R4HQQOQNPAF7S4GFV0ZKOA4USU98FS7CB13II5V3LJWD4JNFM01EG3BYCN?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC2",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KH8ZMJNBH3HSRXF2M86BQ/dashboard/share/US_Z2HWF5HDLQGUG85QQDGZ7PPC4SRJDM7Q5ZRADD1MZ49CV2Z7C1UW2FPPQNRWUD1N?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC3",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KH969RSJ20YXP8W7EMS6F/dashboard/share/US_JPIOE1E4QH3Z45106NMO0V3M981UR5ULZES94OOHBJ0V4VDK2DRE2GDE7V8W5G4O?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC4",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KK87W1N1BM4672C53SGSK/dashboard/share/US_K5BTZODKJ2MBH0JEMGZUY8TYOY6XYIGOCK1TU7HQ4RN9AQ5JU6ZFG762KIURNHE3?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC5",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KKBM15E4WJBWDC1A3XGXW/dashboard/share/US_KET3UUTXX1IA6S9BSSO89QHIZS9FVEBZ0V1TZ6F4HNGC2QY4BIFIRFOQ4JTY2HWZ?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC6",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KMGMYW5AZWRM4S395PWGG/dashboard/share/US_V8ODUSHMRQ3ZIPQDU74GSJURESM4B985XQNJ60NR3UE3MYDMI383WOEYYRJFQDPI?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC7",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KNTQJ0K78HR02SFSXWVF1/dashboard/share/US_TEG6XULXBHBO3GPL28N4LSMO7K8STN9FJ5NZ8KGV465RIFLCZ39PZJTI9H9BSDE0?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC8",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KPMQJQAB9P6C6WYDFGEME/dashboard/share/US_PEOBY2OVC75D7X769CTASMK1VCIN6DKV574PIEA8NBL1LZSUJ5LRJY5FY5YPCBIS?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC9",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KPWTMC44XM9TGSRVTA4AM/dashboard/share/US_0O5UV5P9I5YU4XU60QEIQH69WLRJK8LYOYX5WILOHRG65BPXAXNX2HFDWKJ1QJIT?type=summary&agentView=true&fqdn=summary-page"
+        }
+      ]
+    },
+    {
+      "role": "mutant",
+      "app": "mutants/no-clash-check",
+      "mustFail": [
+        "AC5"
+      ],
+      "grade": 8.9,
+      "criteria": [
+        {
+          "id": "AC1",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KZ3GMDTC2EPE3QX8R9M3V/dashboard/share/US_EPKQ4V5IKR30XFY7MN2V99JSL1UN67S1RINESRPFLCMKS8M7CH2GWEVXPTWPTKWS?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC2",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KZ4127VR60PQ65PYMPPFA/dashboard/share/US_N9OMGVMHYKGNMISQADCRFE21VV9XYF0UFDXFB2K74MPLUA36Y88J4OCKJ2CH0S72?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC3",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KZ424NKCYEZ3MZ65J4DXH/dashboard/share/US_3LAL1CR28MVYVVNKZ3JPWBGP9AQP1J0SPMYCTFO3RNB2Q6BJ65CXVZREUX7QCQU2?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC4",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M06Z6RTFASHEENGGGPKZE/dashboard/share/US_N2DRWX694SGH5U7B2472RYQ4D61VKWJJ1K7C0727BSTJY3IXKW8LU28FDQFHUMP6?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC5",
+          "status": "failed",
+          "reason": "Checkpoint assertion failed: \"the page shows a message that mentions \"Programming I\"\"",
+          "failedStepTitle": "Check the rejection",
+          "testUrl": null
+        },
+        {
+          "id": "AC6",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M1DN1BPXWHSK8AAGJXTPF/dashboard/share/US_LVL9M4P45HV4L2D955H3OB1G5VM1LBYLP4EP7VDXARVF6V2XMXNGRLBA9BOAY1FW?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC7",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": null
+        },
+        {
+          "id": "AC8",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M35FJDZ5HJ5HR3BKRKHFH/dashboard/share/US_INN0HHK9X9QKQAVAJDRXV2MBZ29VPBAO86PEEUX33B10SF259TWZXR0D0KIHXGFK?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC9",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M3SNMVWCZPW8J26C8QMJS/dashboard/share/US_F6JNBWQJ9AYC40EK3U73ZF5TI2J2314505DYWKKQDYG0AMEF3VZYYMIE4C3BP396?type=summary&agentView=true&fqdn=summary-page"
+        }
+      ]
+    },
+    {
+      "role": "mutant",
+      "app": "mutants/case-sensitive-search",
+      "mustFail": [
+        "AC7"
+      ],
+      "grade": 8.9,
+      "criteria": [
+        {
+          "id": "AC1",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KZ3E9GRCAAMH08EG2C8V6/dashboard/share/US_A8Z9MM3Y4ODE3UK9MSH1ZI87ULT2A9IJ2HXAL8B7XV0RBFJJQP0CWHNL0FWHW3E0?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC2",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KZ3GQGYF5951FSCWSYCZH/dashboard/share/US_T1R99WVUEWDBQOJF81FUM0RGPMD0GWDUFMMJXV7VNS1BENYY1YIAFHDC09TNIJ8C?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC3",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84KZ421PTE4C5TG3GVEGS7E/dashboard/share/US_7MU8TJV5N9BTF0BIM9YI3WI99MW0GXVFPZ9RL026WBEEU8FCPQVRMV9JK7361F9Z?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC4",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M06W4X7WNPGV0H6SJ7WBP/dashboard/share/US_JZIA8M85JOAQPUNO0NSR35ZHTXEWBMZPW5WHTR5G3T3OO62X6WL3JNP7BYWULTHJ?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC5",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M0JXK9DJ8NNZG271BPZAF/dashboard/share/US_4WGT3EBIBRHADIHVOHNKFBSJXGWD45DGPJY9B3ISYLEZP4OSFL5II10KTL4B61EX?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC6",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M1ESRKSM7SFXBMG8S7NC7/dashboard/share/US_YJAPSZ2LVTIVDHQBAV2GHK2XA05KYSYNO226XKJNY2OM4TT79IVYTYVPKZCYU15I?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC7",
+          "status": "failed",
+          "reason": "Final verification failed: \"\"Databases\" is shown in the catalog and \"Operating Systems\" is not.\"",
+          "failedStepTitle": "Search in lowercase",
+          "testUrl": null
+        },
+        {
+          "id": "AC8",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M3MBM85J0K1J4GJCZ9Z9Y/dashboard/share/US_60WQQ0ZE6PRG7VIERZFCDEQJZS49UP0FZ0RIBYBR8NNWRVRWXMS2FO2GBG561N88?type=summary&agentView=true&fqdn=summary-page"
+        },
+        {
+          "id": "AC9",
+          "status": "passed",
+          "reason": null,
+          "failedStepTitle": null,
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84M3VMMNERBPTA4P2120EYH/dashboard/share/US_XCB5NWXQ0OBIC2F27VP9PPZZZG63NSJW64E5F7POHCQIE6E26B3O12M438199IYR?type=summary&agentView=true&fqdn=summary-page"
+        }
+      ]
+    }
+  ]
+}
