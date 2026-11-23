@@ -25,7 +25,7 @@ for (let i = 2; i < args.length; i++) {
 const emit = (event) => process.stdout.write(`${JSON.stringify({ ...event, v: 1, ts: new Date().toISOString() })}\n`);
 const slug = basename(process.cwd());
 const scenario = process.env.FAKE_KANE_SCENARIO ? JSON.parse(readFileSync(process.env.FAKE_KANE_SCENARIO, 'utf8')) : {};
-const outcomes = scenario[slug] ?? {};
+let outcomes = scenario[slug] ?? {};
 
 emit({ type: 'stream_start', cli_version: 'fake', surface: 'testrun' });
 if (outcomes === 'crash') {
@@ -39,6 +39,8 @@ if (!page.includes('<html')) {
   emit({ type: 'error', code: 'UNREACHABLE', detail: `could not load ${url}` });
   process.exit(2);
 }
+// test/fake-agent.mjs marks an app as fixed; a fixed app passes everything.
+if (page.includes('<!-- fixed -->')) outcomes = {};
 
 const executionId = `exec-${slug}`;
 const evidence = join('.testmuai', 'evidence');

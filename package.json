@@ -7,7 +7,7 @@
     "profe": "bin/profe.mjs"
   },
   "scripts": {
-    "test": "node --test test/serve.test.mjs test/grade.test.mjs test/report.test.mjs",
+    "test": "node --test test/serve.test.mjs test/grade.test.mjs test/report.test.mjs test/loop.test.mjs",
     "seed": "node scripts/seed-examples.mjs",
     "demo": "node bin/profe.mjs demo"
   },

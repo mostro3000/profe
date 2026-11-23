@@ -3,10 +3,11 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadAssignment, loadRoster, resolveSubmission } from './assignment.mjs';
 import { calibrate, gradeAll, gradeSubmission } from './grade.mjs';
+import { closedLoop, renderLoopTranscript } from './loop.mjs';
 import { renderFeedback, renderHtml, summarizeCalibration, writeReport } from './report.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BOOLEAN_FLAGS = new Set(['headed', 'force', 'help']);
+const BOOLEAN_FLAGS = new Set(['headed', 'force', 'help', 'commit']);
 
 const HELP = `Profe: the teaching assistant that actually runs your students' apps.
 
@@ -23,6 +24,12 @@ Usage
   profe check <assignment-dir> --app <folder|url>
                                            Student self-check. Writes profe-feedback.md; exit 0
                                            only when every criterion passes.
+  profe loop <assignment-dir> --app <folder> --agent "<agent command>"
+                                           Closed loop: grade, hand the feedback to a coding agent
+                                           (e.g. "codex exec --full-auto" or "claude -p --permission-mode
+                                           acceptEdits"), grade again, until everything passes.
+      --rounds <n>                         Agent rounds at most (default 3).
+      --commit                             Commit every grade and every agent fix (git).
   profe report <report.json>               Re-render the HTML dashboard from a report.json.
   profe demo                               Calibrate, then grade the example submissions.
 
@@ -65,6 +72,8 @@ export async function main(argv) {
       return cmdGrade(positional, flags);
     case 'check':
       return cmdCheck(positional, flags);
+    case 'loop':
+      return cmdLoop(positional, flags);
     case 'calibrate':
       return cmdCalibrate(positional, flags);
     case 'report':
@@ -127,6 +136,45 @@ async function cmdCheck(positional, flags) {
   console.log(`\nFeedback: ${relative(process.cwd(), feedbackFile)}`);
   if (result.kane.infraError) return 2;
   return result.failedCount === 0 && result.unverifiedCount === 0 ? 0 : 1;
+}
+
+async function cmdLoop(positional, flags) {
+  if (!positional[0] || !flags.app || flags.app === true || !flags.agent || flags.agent === true) {
+    throw new Error('usage: profe loop <assignment-dir> --app <folder> --agent "<agent command>" [--rounds 3] [--commit]');
+  }
+  const rubric = loadAssignment(positional[0]);
+  const submission = resolveSubmission({ student: flags.name ?? 'self-check', app: String(flags.app) });
+  console.log(`Profe loop · ${rubric.title} · agent: ${flags.agent}`);
+  const loop = await closedLoop({
+    ...options(flags),
+    rubric,
+    submission,
+    agentCommand: String(flags.agent),
+    maxRounds: positiveInt(flags.rounds, 3),
+    commit: Boolean(flags.commit),
+    onRound: printRound,
+  });
+  const transcript = resolve(flags.transcript ?? join(submission.dir, 'profe-loop.md'));
+  writeFileSync(transcript, renderLoopTranscript(rubric, loop));
+  const first = loop.rounds[0];
+  const last = loop.rounds.at(-1);
+  console.log(
+    `\n${loop.ok ? '✓' : '✗'} ${first.passed}/${first.total} → ${last.passed}/${last.total} criteria after ${loop.rounds.length - 1} agent round(s)`,
+  );
+  console.log(`Transcript: ${relative(process.cwd(), transcript)}`);
+  if (loop.infraError) return 2;
+  return loop.ok ? 0 : 1;
+}
+
+function printRound(event) {
+  if (event.kind === 'graded') {
+    const failing = event.failed.length ? ` · failing: ${event.failed.join(', ')}` : ' · all pass';
+    console.log(`\n■ Round ${event.round}: ${event.passed}/${event.total} criteria${failing}${event.commit ? ` · commit ${event.commit}` : ''}\n`);
+  } else if (event.kind === 'agent-start') {
+    console.log(`→ Asking ${event.agent} to fix ${event.failed.join(', ')} (agent round ${event.round})…`);
+  } else if (event.kind === 'agent-end') {
+    console.log(`← ${event.agent} finished in ${event.durationS} s (exit ${event.exitCode})${event.commit ? ` · commit ${event.commit}` : ''}`);
+  }
 }
 
 async function cmdCalibrate(positional, flags) {
