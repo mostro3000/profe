@@ -94,7 +94,7 @@ Diego's AC9 is the case a screenshot misses. His app looks right after a Drop, a
 
 Two more runs closed the picture:
 
-- **The closed loop, for real.** `profe loop` with Claude Haiku as the student's agent took a copy of Bruno's app from 7/9 to 9/9 in one round. The agent spent 17 seconds and fixed exactly the two bugs Kane reported (see [`agent-loop/`](agent-loop/README.md)).
+- **The closed loop, for real, with two agents.** `profe loop` took Bruno's app from 7/9 to 9/9 with Claude Haiku (17 s of agent time), and Diego's from 7/9 to 9/9 with Muse (`muse-spark-1.3-contributor`, 36 s). Muse fixed Diego's invisible `TypeError` from Kane's console evidence alone. See [`agent-loop/`](agent-loop/README.md).
 - **Kane checks the dashboard.** `npm run selftest` passed: grades table, evidence drill-down, export refused until a grade is approved, then approve and export.
 
 ### Verdicts versus diagnoses

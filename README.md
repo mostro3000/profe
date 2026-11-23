@@ -59,7 +59,12 @@ profe loop assignments/course-enrollment --app ./my-app --agent "codex exec --ap
 profe loop assignments/course-enrollment --app ./my-app --agent "claude -p --permission-mode acceptEdits"
 ```
 
-In our run, Claude Haiku took a copy of Bruno's app from **7/9 to 9/9 in one round** (17 seconds of agent time). It fixed exactly the two bugs Kane reported. The transcript, the diff and the fixed app are in [`docs/agent-loop/`](docs/agent-loop/README.md). The Codex command above shows the shape of the call; our recorded run used Claude.
+We recorded the loop with two different agents, and each fixed exactly the bugs Kane reported in one round:
+
+- **Claude Haiku 5.5** took Bruno's app from **7/9 to 9/9** in 17 seconds.
+- **Muse** (`muse exec --model muse-spark-1.3-contributor`) took Diego's app from **7/9 to 9/9** in 36 seconds. That includes the uncaught `TypeError` that never shows on screen, which Muse fixed from Kane's console evidence.
+
+The transcripts, diffs and fixed apps are in [`docs/agent-loop/`](docs/agent-loop/README.md). The Codex command above shows the shape of the call; Codex was not run.
 
 ## How Profe uses Kane CLI
 
