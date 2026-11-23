@@ -49,7 +49,7 @@ Known bugs caught:  2/2
 ✓ Calibrated: these tests can be trusted to grade students.
 ```
 
-The three calibrations cost about 830 credits in total. The result is in [`assignments/course-enrollment/calibration.json`](../assignments/course-enrollment/calibration.json).
+That run still graded two apps at a time. Section 4 explains why its verdict was later thrown away and the calibration was redone from scratch.
 
 ## 4. Two students at once: one test started on Bruno's app and finished on Carla's
 
@@ -62,7 +62,17 @@ run_end · final_state: { "url": "http://127.0.0.1:35501/", … }          ← C
 
 Two `kane-cli testrun` processes on one machine launch Chrome on the same DevTools port range (9222–9230) and end up attached to each other's browsers. The same cross-talk explains the `TargetClosedError`s seen while calibrating with concurrency above 1. The very first single-process run had none.
 
-The run was stopped, its workspaces deleted, and Profe now runs one `testrun` at a time (commit `7cca3dd`). Parallelism stays inside each testrun (`--parallel`), where Kane coordinates its own workers. Calibration was then re-validated sequentially.
+The run was stopped, its workspaces deleted, and Profe now runs one `testrun` at a time (commit `7cca3dd`). Parallelism stays inside each testrun (`--parallel`), where Kane coordinates its own workers.
+
+### The cross-talk had also left a poisoned recording behind
+
+Re-validating the calibration one testrun at a time failed AC2 on the reference solution. Kane's own diagnosis of the failed run:
+
+> The page was still in its initial state: My courses was empty and Operating Systems still had 4 seats. […] no enrollment action occurred.
+
+The recording of the step "Enroll in Operating Systems" replayed with `actions_executed: 0`. It had been authored during the concurrent calibration, while the click landed in another process's Chrome. Adaptive heal could not fix it, because an empty step "passes" its replay.
+
+Recordings authored under cross-talk cannot be trusted. `profe --fresh` now passes Kane's `--author` to re-author every step, and the calibration was re-run from scratch.
 
 ## 5. Lessons, now built into Profe
 
@@ -70,3 +80,4 @@ The run was stopped, its workspaces deleted, and Profe now runs one `testrun` at
 2. "Failed" from a browser agent is not always the student's failure. Read why it failed before taking points away.
 3. Put a precondition in its own step. Kane re-verifies each step's whole objective when the step ends.
 4. Check where the browser actually was. Kane's `final_state.url` caught a cross-talk bug that no assertion would have.
+5. A passing replay is not proof of an action. After an infrastructure incident, re-author (`--fresh`) instead of trusting old recordings.
