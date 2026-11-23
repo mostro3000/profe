@@ -1,7 +1,7 @@
 {
   "tool": "profe",
   "version": "0.1.0",
-  "generatedAt": "2026-11-23T17:36:58.406Z",
+  "generatedAt": "2026-11-23T18:42:42.758Z",
   "assignment": {
     "id": "course-enrollment",
     "title": "Assignment 3: Course Enrollment",
@@ -311,8 +311,8 @@
       "note": "seeded bugs",
       "app": "submissions/bruno",
       "url": null,
-      "gradedAt": "2026-11-23T17:13:49.325Z",
-      "durationS": 274,
+      "gradedAt": "2026-11-23T18:33:10.024Z",
+      "durationS": 290,
       "criteria": [
         {
           "id": "AC1",
@@ -325,15 +325,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Verified the requested Operating Systems course details in the course catalog.\nConfirmed that Operating Systems is scheduled on Wednesday from 10:00 to 12:00.\nConfirmed that the course shows 4 available seats.",
+          "summary": "Verified the Operating Systems course listing in the course catalog.\nConfirmed that it meets on Wednesday from 10:00 to 12:00.\nConfirmed that 4 seats are available.",
           "observed": {
-            "course": "Operating Systems",
-            "schedule": "Wednesday, 10:00–12:00",
-            "available_seats": "4"
+            "Operating Systems schedule": "Wednesday from 10:00 to 12:00",
+            "Operating Systems available seats": "4"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PCN3X15KBKCYHX6EVNQA6/dashboard/share/US_RCTRTM28S7FTW5Z45D4PA7ELQNP8VJ2DIMW9IWB5VLFY7TD833DQSL6K1OZI4ST5?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 55,
-          "sessionId": "95f5e78c-494a-4573-9c31-222ffb5939b3",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84TXYQRC6K5FG4D05VEQ8N5/dashboard/share/US_KUX630M0AXH1TKO3SKTGNGSFO6CXJJW4G3TKTYNYVKDHYQEQEAGWBUDBYWR36DEN?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 63,
+          "sessionId": "35329fc1-0ed7-4696-b9c1-a97df453792f",
           "attempts": 1
         },
         {
@@ -347,14 +346,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Completed the enrollment for the Operating Systems course.\nConfirmed that Operating Systems appears under My courses.\nConfirmed that the course catalog shows 3 available seats for Operating Systems.",
+          "summary": "The request was to enroll in the Operating Systems course.\nOperating Systems was added to My courses.\nThe catalog showed 3 available seats for Operating Systems after the update.",
           "observed": {
             "operating_systems_my_courses_listed": "true",
             "operating_systems_available_seats": "3"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PCNBZV8FK8R89E6GQE89B/dashboard/share/US_CYX7D3SU0X1PTZRXEVXA5U30LME25EOGCWUSXDYLN5DHLE1C1LXBRUQHT06EL2KY?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 53,
-          "sessionId": "b74a9107-460c-4abb-8e37-bc6120fe8ace",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84TXYXQ64H7HHEN75Z9BAGG/dashboard/share/US_982J01FH7VYVHCKOLE8Y97NHDD3U1X2RCZCE9VDUJCVVZRZUOWIT36ERQ00OVYTG?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 62,
+          "sessionId": "609091b7-3da6-4bed-b57b-755e9263aa2b",
           "attempts": 1
         },
         {
@@ -365,14 +364,14 @@
           "test": "tests/ac3_no_duplicates_test.md",
           "status": "failed",
           "kaneStatus": "failed",
-          "reason": "Checkpoint assertion failed: \"The button for \"Web Development\" in the catalog reads \"Enrolled\" and is disabled.\"",
+          "reason": "Checkpoint assertion failed: \"the button for \"Web Development\" in the catalog reads \"Enrolled\" and is disabled\"",
           "failedStep": 3,
           "failedStepTitle": "Check the button and the list",
-          "summary": "The catalog and My courses are showing conflicting enrollment information for the same course. The course is already listed as selected, yet the catalog still treats it as available, including all 4 seats.\nMake the catalog use the same enrollment record as My courses. For an enrolled course, display a disabled Enrolled button and update its available-seat count consistently.\nevidence: objective_contradiction: check FAILED: The button for \"Web Development\" in the catalog reads \"Enrolled\". — expected: Enrolled | observed: {{web_d\nevidence: objective_contradiction: check FAILED: The button for \"Web Development\" in the catalog is disabled. — expected: false | observed: {{web_developme",
+          "summary": "The catalog and My courses panel disagree about the student's enrollment. The course is already in My courses, but the catalog still treats it as available to enroll.\nMake the catalog refresh its enrollment status from the same enrollment record used by My courses. When Web Development is already listed there, show an Enrolled button and disable it.\nevidence: objective_contradiction: check FAILED: the button for \"Web Development\" in the catalog reads \"Enrolled\" — expected: Enrolled | observed: {{web_de\nevidence: objective_contradiction: check FAILED: the button for \"Web Development\" in the catalog is disabled — expected: false | observed: {{web_developmen",
           "observed": null,
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PCNE3RDR43RQ255P219F6/dashboard/share/US_TL2RMNS05NF2QZ0K0BRI3ZWKFKINTI7OSPK8QRMHKH0UVGWF4HSOC63NGXMGDNOC?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 96,
-          "sessionId": "e123a819-9e7e-4090-88b8-6066086fccfd",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84TXZ50A8Q506BH4BZ0RJTM/dashboard/share/US_NDGZKACIY8GEJPEJ5IDW8K5SEBIDAMOHQCT6U2JT6XZGVSB6R7YL9NJZRWDVDYA2?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 119,
+          "sessionId": "fa77f526-9b1a-47ff-ada6-370f91fb15e3",
           "attempts": 1
         },
         {
@@ -386,13 +385,13 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Checked the “My courses” list as requested.\nConfirmed that “Software Engineering” is not listed under “My courses”.",
+          "summary": "Checked the \"My courses\" list on the site for \"Software Engineering\".\nConfirmed that \"Software Engineering\" was not listed under \"My courses\".",
           "observed": {
             "software_engineering_my_courses_listing": "false"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PENHRQ9NGWANYR6HC07ZG/dashboard/share/US_YA7OQT3GJQY53VCVEENAUQ34KWUVTAL007WXTPMNHNUCEN0QW5EBX3PBLZBT1R4H?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 83,
-          "sessionId": "6520fedf-a2a7-462e-9e2e-0967e61f3e73",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V07S9J3HPK38WCVDREJ3E/dashboard/share/US_4K7GJ0E44ZILCAUJN0W0RBR6RJFLKXIX9UPJOLRCJM6WTQ66EYPC189M3GKR7PY8?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 68,
+          "sessionId": "5313d018-22ce-4895-9fd8-41deaf87c895",
           "attempts": 1
         },
         {
@@ -406,15 +405,15 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "The user asked to manage course enrollment.\nAn attempt was made to enroll in Databases, but the page displayed a message mentioning Programming I, indicating a scheduling conflict.\nDatabases was not added to My courses, and its catalog listing still showed 2 seats available.",
+          "summary": "The user attempted to enroll in Databases.\nThe page displayed a message mentioning Programming I, indicating a scheduling conflict.\nDatabases was not added to My courses, and its catalog listing still showed 2 available seats.",
           "observed": {
-            "programming_i_message_present": "true",
+            "databases_available_seats": "2",
             "databases_my_courses_listing": "false",
-            "databases_available_seats": "2"
+            "programming_i_message_visible": "true"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PENR9S1GYY378H1H38SGK/dashboard/share/US_ACQONGVSCIYJBA50ML57DUNDIXK51TB83PL2JQY2UCHI6TUR4A0MGU8JMGX0DHNM?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 63,
-          "sessionId": "5da80675-2deb-407c-9361-41e2cc1f1d12",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V084HAV1AEPNDRT3ESJQQ/dashboard/share/US_OHRSUTCYZ1K1JTW9XF1SG689SRCI6MG3VM92QPGESRCCE2AVN3AUR4GMM4Q6KU1P?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 66,
+          "sessionId": "d76f17c0-456d-410c-8116-096b8f6db9aa",
           "attempts": 1
         },
         {
@@ -428,11 +427,11 @@
           "reason": "Final verification failed: \"The catalog shows 1 available seat for \"Computer Networks\".\"",
           "failedStep": 3,
           "failedStepTitle": "Check the seat came back",
-          "summary": "After the course was dropped, the app removed it from the student’s list but did not add the released seat back to the catalog.\nUpdate the drop operation so it returns one seat to Computer Networks and refreshes the catalog count after the drop.\nevidence: objective_contradiction: check FAILED: The catalog shows 1 available seat for \"Computer Networks\". — expected: 1 | observed: {{computer_networks_\nevidence: objective_contradiction: check FAILED: \"Computer Networks\" is no longer listed under \"My courses\". — expected: false | observed: {{computer_netwo",
+          "summary": "After the course was dropped, the app removed it from the student’s course list but did not add its seat back to the catalog.\nFix the drop flow so it restores one available seat for the dropped course, then refreshes the catalog count and availability badge.\nevidence: objective_contradiction: check FAILED: The catalog shows 1 available seat for \"Computer Networks\". — expected: 1 | observed: {{computer_networks_",
           "observed": null,
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PFRARV91V4EZR41TMK690/dashboard/share/US_65OY3R7UH6E1WSEVSTW2O7XBDEHTGU27FDNS8MFAG9JUXXU4QQB5BRY1UMPXNIGW?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 77,
-          "sessionId": "9968c0d3-6a10-44d6-86dc-1996936cf5e5",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V1S7R5DTA1RNFA6P2MW20/dashboard/share/US_5L0BL66V1ZDIK9BNA5S0XLNPD4E5DWNEH25LOQ07UW31ZH49HQRUOYYFMIASR5UD?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 73,
+          "sessionId": "152df456-1caf-468a-ae51-146c03ca46a3",
           "attempts": 1
         },
         {
@@ -446,13 +445,13 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Cleared the catalog search box as requested.\nThe catalog returned to showing all six courses.",
+          "summary": "The requested action was to clear the catalog search box.\nThe search box was cleared, and the catalog returned to showing all six courses.\nThe task was completed successfully.",
           "observed": {
-            "catalog_course_count": "6"
+            "all_six_courses_catalog_visible": "true"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PGZE3YX7EPJKQ2WDAHA95/dashboard/share/US_LBT6CECQDXTH9A5UKSJV9WULD4PVTGW6T1MJ01IB7RNM08AIUFPG6W2ASSW88G34?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 114,
-          "sessionId": "04e84d53-6110-48d3-901c-ae777507d296",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V2MA80XDKMG8QV34Q8N5J/dashboard/share/US_4V0RDRTXH5XFCAD1N4SGF73H8EA6PF1QQO5ENJEAN690OPUP5HLDBQTEHC3LABM0?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 117,
+          "sessionId": "b0e87389-e371-4642-9ed8-1d7db652bf28",
           "attempts": 1
         },
         {
@@ -466,14 +465,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Reviewed the course catalog and My courses list as requested.\nConfirmed that Operating Systems remains listed under My courses.\nConfirmed that the catalog shows 3 available seats for Operating Systems.\nThe requested course information was successfully verified.",
+          "summary": "Checked that Operating Systems remains listed under My courses.\nConfirmed that the Operating Systems catalog listing shows 3 seats available.\nThe requested course listing and seat availability were both confirmed.",
           "observed": {
-            "operating_systems_available_seats": "3",
-            "operating_systems_my_courses_listing": "true"
+            "operating_systems_my_courses_listed": "true",
+            "operating_systems_available_seats": "3"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PHHBCW85M6R5X4T8EECFQ/dashboard/share/US_D4LI4J6NV818H4K61C7FUBQNIYJQXTWEN5I5E3FLMB2FB52O88X2VGK7L6RRS0SX?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 66,
-          "sessionId": "d7c9f548-b0ff-49d6-b5c6-e063df405331",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V2MNZDYAFAQKZH3ED4QN5/dashboard/share/US_UKC30W4QY1K3UA5SRR9G0ET1F8LCJTL8DY5W8BNGT6R2SQVLTJIIY0QKHWK7K2TU?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 77,
+          "sessionId": "cf5ca8d5-8db2-42d0-aedb-a1039d2b71ad",
           "attempts": 1
         },
         {
@@ -487,13 +486,13 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Enrolled in the Web Development course.\nDropped Web Development from My courses.\nEntered “net” in the Search courses box.\nCompleted the requested course actions with no uncaught JavaScript errors recorded.",
+          "summary": "Enrolled in the Web Development course, then dropped it from My courses as requested.\nEntered “net” in the Search courses box.\nThe run completed successfully with no uncaught JavaScript errors recorded.",
           "observed": {
-            "uncaught_javascript_exceptions_check": "false"
+            "uncaught_javascript_exceptions": "true"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PJ8RX0SDV7F7QXQZQMB19/dashboard/share/US_SH70IYLOJ4DYUKUZZFXH7GVKL65KC8MJ0C54SUL39PYEEDES0K3DVKZZMZC5PW3O?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 45,
-          "sessionId": "a4573294-55cb-463f-931d-60acd0a4e8d8",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V44SM3CWJQDB3SPTPXWV5/dashboard/share/US_86USJSJR8DE2QH1A3H1CP2WMVD79Q6K3750GU6KZFCZYMXLKQYA6DC6SOH3QS500?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 48,
+          "sessionId": "cb527103-289a-457f-aa48-42c8f2c65f0e",
           "attempts": 1
         }
       ],
@@ -507,8 +506,8 @@
       "needsReview": false,
       "kane": {
         "exitCode": 1,
-        "executionId": "1694a2d3-38b1-4910-b5fe-ca4a991c99bd",
-        "evidenceId": "1694a2d3-38b1-4910-b5fe-ca4a991c99bd",
+        "executionId": "449dcbb9-9474-4221-bd91-0df87d9a3018",
+        "evidenceId": "449dcbb9-9474-4221-bd91-0df87d9a3018",
         "totals": {
           "tests": 9,
           "passed": 7,
@@ -756,8 +755,8 @@
       "note": "seeded bugs",
       "app": "submissions/diego",
       "url": null,
-      "gradedAt": "2026-11-23T17:22:41.135Z",
-      "durationS": 289,
+      "gradedAt": "2026-11-23T18:37:59.687Z",
+      "durationS": 283,
       "criteria": [
         {
           "id": "AC1",
@@ -770,14 +769,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Checked the course catalog for the requested Operating Systems course.\nConfirmed that Operating Systems is scheduled for Wednesday from 10:00 to 12:00.\nConfirmed that the course shows 4 available seats.",
+          "summary": "Checked the course catalog for the Operating Systems course.\nConfirmed that Operating Systems is scheduled on Wednesday from 10:00 to 12:00.\nConfirmed that Operating Systems has 4 seats available.",
           "observed": {
-            "Operating Systems schedule": "Wednesday 10:00–12:00",
+            "Operating Systems schedule": "Wednesday from 10:00 to 12:00",
             "Operating Systems available seats": "4"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PX1A1RP4DDD5N0CSTXCJE/dashboard/share/US_W01BTRB6UX3XWNLCPT6D9JFAGBS79J7UNQV9CSAEFI0I9KTPKBPLDEJTMBDPWG8U?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 55,
-          "sessionId": "0d387ae1-3e99-46c4-accb-ef499e56ca8f",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V6SCNQ218Y70XBYZ1WCT5/dashboard/share/US_7YHG0L5OJCLLX24U5D5V3IU8CJ0BFIST0PCDEJJ36ID3ISPO57DDM96ZO01LFFS3?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 63,
+          "sessionId": "7129a79c-c5ce-4dad-bb43-f2ae9b561581",
           "attempts": 1
         },
         {
@@ -791,14 +790,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "The request was to enroll in the Operating Systems course.\nOperating Systems was added to My courses.\nThe catalog showed 3 available seats for Operating Systems after the enrollment.",
+          "summary": "The requested Operating Systems course enrollment was completed.\nOperating Systems now appears under My courses.\nThe catalog shows 3 available seats remaining for Operating Systems.",
           "observed": {
             "operating_systems_my_courses_listed": "true",
             "operating_systems_available_seats": "3"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PX1G04WJ4Y7VW8BAPDMN2/dashboard/share/US_IKLK18H4PZ6RQLOW40MZ92UPAOXC0F1ID91VBFO7AISF5NTXPTDAZ5T3UWUK538J?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 55,
-          "sessionId": "ac1c0eda-c6db-4dac-a325-0283b849e244",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V6SN0B34XSJQW0M4FXXXF/dashboard/share/US_698VIZL3UASU5G15OP2YNCBW4JUBGCDV99QEKA5ASQZGW534SQOT9HQRC5A5QUJ3?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 57,
+          "sessionId": "841bf677-9744-4e02-adf0-e1cd1525df66",
           "attempts": 1
         },
         {
@@ -812,16 +811,16 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "The requested course enrollment was completed.\nWeb Development now appears once in My courses.\nThe Web Development catalog entry shows 4 seats available, and its button reads “Enrolled” and is unavailable to select again.",
+          "summary": "Completed the requested enrollment for the Web Development course.\nWeb Development appears once under My courses.\nThe catalog now shows the course as Enrolled with a disabled button, and 4 seats available.",
           "observed": {
             "web_development_my_courses_count": "1",
-            "web_development_available_seats": "4",
             "web_development_catalog_button_text": "Enrolled",
-            "web_development_catalog_button_enabled": "false"
+            "web_development_catalog_button_enabled": "false",
+            "web_development_available_seats": "4"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PX1XBXDHJ5NY6DVXNBVDT/dashboard/share/US_26ZOV6ELMHYNHNE431ED2TENGEJR0M5B3OY0Z1XVG3968OVBTT7W567M5UAA41CN?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 89,
-          "sessionId": "ed1d42f4-a6dc-4b71-a9cc-c457473b7da6",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V6SVARMDYSG1VACBDMS66/dashboard/share/US_BM7X5N4VBFOZWY1NCRXPJ8YVU37MPO1AAWI60YG6OIX668G1OZ2E8HMBP3UKIQ8A?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 79,
+          "sessionId": "75de3132-7146-42d8-91dd-69f481843f02",
           "attempts": 1
         },
         {
@@ -835,13 +834,13 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Checked the “My courses” section on the site.\nConfirmed that “Software Engineering” was not listed under “My courses”.",
+          "summary": "Checked the “My courses” list as requested.\nConfirmed that “Software Engineering” is not listed under “My courses”.",
           "observed": {
             "software_engineering_my_courses_listing": "false"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PZ4DYK4P5XQXTCHXF13QM/dashboard/share/US_17VUP6AM41Y0F9VV250UPRO4VL8ODPEM6518EALOT0GU9NICKJ5VNL6VFMWJRXJP?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 77,
-          "sessionId": "7fa6dafa-2a66-4b7e-9e93-bb6f3e98d14a",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V8WS1ZF0R4AWQMJE5HY28/dashboard/share/US_NO4D9P9GRILYTKF6MGNB0N8WQKBU3YB0B3QZTAVHKJQKVB63FJIQKW0BGBSRXYG4?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 72,
+          "sessionId": "fc8e6c19-e998-4af5-8f80-167a56349828",
           "attempts": 1
         },
         {
@@ -852,14 +851,14 @@
           "test": "tests/ac5_schedule_clash_test.md",
           "status": "failed",
           "kaneStatus": "failed",
-          "reason": "Final verification failed: \"\"Databases\" is not listed under \"My courses\" and the catalog still shows 2 available seats for \"Databases\"\"",
+          "reason": "Checkpoint assertion failed: \"the page shows a message that mentions \"Programming I\"\"",
           "failedStep": 3,
           "failedStepTitle": "Check the rejection",
-          "summary": "The run used the wrong starting enrollment data. Databases was already in My courses, so its available-seat count was already reduced from two to one.\nReset Diego's course enrollments before this test, or use a fresh student whose only relevant enrollment state matches the scenario.",
+          "summary": "The page was still showing the starting enrollment state: its visible message says that Databases was enrolled, and Databases remains in My courses with only 1 seat available. The run performed no interaction to reach the state required by the checkpoint.\nAdd the required enrollment or drop actions and wait for the page to update before asserting the message, that Databases is absent from My courses, and that it has 2 available seats.",
           "observed": null,
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PZ4KYVZJ8NZQF97TBRA5T/dashboard/share/US_ZKSDZ03A7OJDBE6DUJ2ZB1WM426CFN69ECHA13Z27WOK68K279BF7JMVQQMBQ72Z?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 95,
-          "sessionId": "e7bcff2e-e998-4467-a1ae-96e9f56e6ece",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V91TVBV03QKZQ9CD6R5RX/dashboard/share/US_2JV7HXE0SF2TAPIB63FR06E95V4CND9F0TDMCL9O183E3WP5IC23MFOD2PI8YV7T?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 77,
+          "sessionId": "8ccb3051-e34a-4082-b312-d40aafc8bf3a",
           "attempts": 1
         },
         {
@@ -873,14 +872,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "The requested course update was completed.\nComputer Networks was removed from My courses.\nThe catalog now shows 1 available seat for Computer Networks.",
+          "summary": "The requested change was completed: \"Computer Networks\" was removed from My courses.\nThe course catalog now shows 1 available seat for \"Computer Networks\".",
           "observed": {
             "computer_networks_my_courses_listing": "false",
             "computer_networks_available_seats": "1"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84Q058D6YM82C5G6CZRJYP5/dashboard/share/US_SGDEEISTYPJ5IPQUHAQ9EE189P47D3GQ26EZO2IZQW0O2YS598UKKZ324H68979Q?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 67,
-          "sessionId": "1e20d5a3-c29c-4ee5-92b3-b66370ee20a9",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V9H9HKC5NEAC2BQ4BHEMC/dashboard/share/US_TI19KKJY2WQ26A2MKCEVNMBD6F0K1KD0MLO6A9B2SLJQKYVV2NBXAXFYN8ZUQIA0?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 70,
+          "sessionId": "97e411e3-2033-4deb-afe0-c2587ec6d494",
           "attempts": 1
         },
         {
@@ -894,13 +893,13 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Cleared the course catalog search box as requested.\nThe catalog returned to showing all six course entries.",
+          "summary": "Cleared the course search box as requested.\nThe catalog returned to showing all six courses.",
           "observed": {
-            "all_six_courses_shown_in_catalog": "true"
+            "catalog_course_count": "6"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84Q1W6MX80HN6A57X8A2FTK/dashboard/share/US_C8M7H4KTU2L1EDXUTFU4AGPHBVD5S57WIRHT2U3DWDAMGMPM9P13OKDTIXSV5VX1?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 107,
-          "sessionId": "c641f92d-5291-42d2-803c-08c25d7e1718",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84VBF9V2MGN1JWJSCKK8AV7/dashboard/share/US_XGA75B1C5AR00W8FXEX4G9WH3ULEDEDM0X7AAWY70H61DAO56Q0K375FLY1C8X34?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 111,
+          "sessionId": "6fee3b2e-7cce-4c0f-9f37-3bdc204f8a98",
           "attempts": 1
         },
         {
@@ -914,14 +913,14 @@
           "reason": null,
           "failedStep": null,
           "failedStepTitle": null,
-          "summary": "Checked the course listings and confirmed that “Operating Systems” remains under “My courses.”\nConfirmed that the “Operating Systems” catalog entry shows 3 seats available.\nThe requested course information was successfully verified.",
+          "summary": "Checked the course catalog and My courses list.\nConfirmed that Operating Systems remains listed under My courses.\nConfirmed that the Operating Systems catalog listing shows 3 available seats.",
           "observed": {
-            "operating_systems_my_courses_listed": "true",
+            "operating_systems_my_courses_listing": "true",
             "operating_systems_available_seats": "3"
           },
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84Q25R4G4AS70N7D7B249RM/dashboard/share/US_BUSA5K1YV67KUVJ8WP09M3QKWEXXKL4NDCKJR3Q20C3G0MC8L7RPVV3WS0XRT0KL?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 62,
-          "sessionId": "2a2f4eab-fff6-4f3e-bce0-b1237d688c73",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84VBHPBKZTXYZ2T9R0XESHM/dashboard/share/US_WMCHP9ODOSR4C5AGIYONQESF5EGTP0YV4XL6M7MQV57MEFK5SBEFFBHSLQGXFFC3?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 70,
+          "sessionId": "a7ec719b-9607-4c18-a505-aeea737208fb",
           "attempts": 1
         },
         {
@@ -935,11 +934,11 @@
           "reason": "Final verification failed: \"the console recorded no uncaught JavaScript exceptions (console entries where is_exception is true) during this step\"",
           "failedStep": 1,
           "failedStepTitle": "Use the app while watching for uncaught exceptions",
-          "summary": "After the course is dropped, the page tries to move focus to something that has already been removed from the page.\nUpdate the drop flow to check that the intended focus target still exists before focusing it, then add a test that drops a course and verifies no uncaught errors occur.\nevidence: console_error: Cannot read properties of null (reading 'focus')",
+          "summary": "After the course is removed, the page tries to move focus to something that is no longer there.\nUpdate the drop action to check that the next focus target exists before focusing it, then repeat the enroll, drop, and search flow.\nevidence: console_error: Cannot read properties of null (reading 'focus')",
           "observed": null,
-          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84Q2M670PQQVCWXDGEGDP9S/dashboard/share/US_98HSMRPST30DAA0MC3GVIVRYGYM4GS9Z18R3A5XYJ6QBFNT85LKCQFW0VXKP2HLB?type=summary&agentView=true&fqdn=summary-page",
-          "durationS": 52,
-          "sessionId": "dbfcb601-dcb7-4949-b21d-0dac058b7ed6",
+          "testUrl": "https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84VC6DAT4RP6TDZMHM2XGS8/dashboard/share/US_7JYCDSNRY6PSPCKPFAFWMY6RDHK4THPO23M8MWZ0LOB881HSFF4KFSXS3X9HNYD3?type=summary&agentView=true&fqdn=summary-page",
+          "durationS": 48,
+          "sessionId": "3dc5ce7e-4c71-49cb-b075-013081f392ec",
           "attempts": 1
         }
       ],
@@ -953,8 +952,8 @@
       "needsReview": false,
       "kane": {
         "exitCode": 1,
-        "executionId": "897940e1-1781-4bca-83d3-024f1bacf2fc",
-        "evidenceId": "897940e1-1781-4bca-83d3-024f1bacf2fc",
+        "executionId": "95c92e21-9f09-4135-bc87-383ee6206ee1",
+        "evidenceId": "95c92e21-9f09-4135-bc87-383ee6206ee1",
         "totals": {
           "tests": 9,
           "passed": 7,

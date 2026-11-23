@@ -2,7 +2,7 @@
 
 **Assignment 3: Course Enrollment** · proposed grade **7.8 / 10** (7 of 9 criteria passed)
 
-Checked on 2026-11-23 17:13 UTC in a real Chrome browser with Kane CLI. Your teacher reviews this grade before it is published.
+Checked on 2026-11-23 18:33 UTC in a real Chrome browser with Kane CLI. Your teacher reviews this grade before it is published.
 
 | | Criterion | Result |
 |---|---|---|
@@ -21,18 +21,18 @@ Checked on 2026-11-23 17:13 UTC in a real Chrome browser with Kane CLI. Your tea
 ### ❌ AC3 · No duplicates
 
 - **The criterion:** After enrolling in a course, its button reads "Enrolled" and is disabled, and the course appears only once in "My courses".
-- **What Kane saw:** Checkpoint assertion failed: "The button for "Web Development" in the catalog reads "Enrolled" and is disabled."
-- **Kane's diagnosis (a hypothesis: check it against the replay):** The catalog and My courses are showing conflicting enrollment information for the same course. The course is already listed as selected, yet the catalog still treats it as available, including all 4 seats. Make the catalog use the same enrollment record as My courses. For an enrolled course, display a disabled Enrolled button and update its available-seat count consistently. evidence: objective_contradiction: check FAILED: The button for "Web Development" in the catalog reads "Enrolled". — expected: Enrolled | observed: {{web_d evidence: objective_contradiction: check FAILED: The button for "Web Development" in the catalog is disabled. — expected: false | observed: {{web_developme
+- **What Kane saw:** Checkpoint assertion failed: "the button for "Web Development" in the catalog reads "Enrolled" and is disabled"
+- **Kane's diagnosis (a hypothesis: check it against the replay):** The catalog and My courses panel disagree about the student's enrollment. The course is already in My courses, but the catalog still treats it as available to enroll. Make the catalog refresh its enrollment status from the same enrollment record used by My courses. When Web Development is already listed there, show an Enrolled button and disable it. evidence: objective_contradiction: check FAILED: the button for "Web Development" in the catalog reads "Enrolled" — expected: Enrolled | observed: {{web_de evidence: objective_contradiction: check FAILED: the button for "Web Development" in the catalog is disabled — expected: false | observed: {{web_developmen
 - **Where:** the step "Check the button and the list" in `tests/ac3_no_duplicates_test.md`
-- **Watch the run:** https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PCNE3RDR43RQ255P219F6/dashboard/share/US_TL2RMNS05NF2QZ0K0BRI3ZWKFKINTI7OSPK8QRMHKH0UVGWF4HSOC63NGXMGDNOC?type=summary&agentView=true&fqdn=summary-page
+- **Watch the run:** https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84TXZ50A8Q506BH4BZ0RJTM/dashboard/share/US_NDGZKACIY8GEJPEJ5IDW8K5SEBIDAMOHQCT6U2JT6XZGVSB6R7YL9NJZRWDVDYA2?type=summary&agentView=true&fqdn=summary-page
 
 ### ❌ AC6 · Drop
 
 - **The criterion:** Clicking "Drop" removes the course from "My courses" and gives its seat back.
 - **What Kane saw:** Final verification failed: "The catalog shows 1 available seat for "Computer Networks"."
-- **Kane's diagnosis (a hypothesis: check it against the replay):** After the course was dropped, the app removed it from the student’s list but did not add the released seat back to the catalog. Update the drop operation so it returns one seat to Computer Networks and refreshes the catalog count after the drop. evidence: objective_contradiction: check FAILED: The catalog shows 1 available seat for "Computer Networks". — expected: 1 | observed: {{computer_networks_ evidence: objective_contradiction: check FAILED: "Computer Networks" is no longer listed under "My courses". — expected: false | observed: {{computer_netwo
+- **Kane's diagnosis (a hypothesis: check it against the replay):** After the course was dropped, the app removed it from the student’s course list but did not add its seat back to the catalog. Fix the drop flow so it restores one available seat for the dropped course, then refreshes the catalog count and availability badge. evidence: objective_contradiction: check FAILED: The catalog shows 1 available seat for "Computer Networks". — expected: 1 | observed: {{computer_networks_
 - **Where:** the step "Check the seat came back" in `tests/ac6_drop_test.md`
-- **Watch the run:** https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84PFRARV91V4EZR41TMK690/dashboard/share/US_65OY3R7UH6E1WSEVSTW2O7XBDEHTGU27FDNS8MFAG9JUXXU4QQB5BRY1UMPXNIGW?type=summary&agentView=true&fqdn=summary-page
+- **Watch the run:** https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84V1S7R5DTA1RNFA6P2MW20/dashboard/share/US_5L0BL66V1ZDIK9BNA5S0XLNPD4E5DWNEH25LOQ07UW31ZH49HQRUOYYFMIASR5UD?type=summary&agentView=true&fqdn=summary-page
 
 ## Check again after fixing
 
