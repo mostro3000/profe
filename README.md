@@ -6,6 +6,8 @@ Students now hand in web apps written with Claude Code, Cursor or Codex. They *l
 
 Profe turns an assignment's acceptance criteria into plain-English [Kane CLI](https://github.com/LambdaTest/kane-cli) tests, runs them in a real Chrome against every student's app, and proposes a grade **criterion by criterion, with evidence for every point**: screenshots of each step, console and network logs, a public link to watch the run, and a sealed evidence pack. The teacher reviews and approves every grade. Profe never publishes one on its own.
 
+**Live sample report: https://mostro3000.github.io/profe/** (the dashboard from grading the example class below).
+
 ```text
 assignment.md ─► rubric.json + tests/ac*_test.md   (one plain-English Kane test per criterion)
                       │
@@ -37,7 +39,7 @@ node bin/profe.mjs demo
 
 Profe grades one submission at a time with three Chrome workers each, which takes about 4 to 5 minutes per submission. On a fresh account every test is authored by Kane on its first run. Our full demo (three calibration runs plus five students, all authored from scratch) took about 40 minutes and roughly 1,650 credits. Later runs replay the recordings and cost far less.
 
-To try it cheaply, grade one student, or open the [sample report](docs/sample-report/index.html) from our run:
+To try it cheaply, grade one student, or open the [live sample report](https://mostro3000.github.io/profe/) from our run:
 
 ```bash
 node bin/profe.mjs grade examples/roster.json --only Bruno
@@ -121,7 +123,7 @@ Run `profe calibrate assignments/<id>` until it says "Calibrated", then grade.
 | Elena | 10 | none | none |
 | Sofi | 10 | none | built in one shot by Claude Haiku 5.5: no failures found |
 
-Kane's verdicts matched the answer key exactly: all six seeded bugs were caught, there were no false failures across 45 checks, and no check needed a retry. The whole report is in [`docs/sample-report/`](docs/sample-report/index.html).
+Kane's verdicts matched the answer key exactly: all six seeded bugs were caught, there were no false failures across 45 checks, and no check needed a retry. The whole report is live at https://mostro3000.github.io/profe/, with its source in [`docs/sample-report/`](docs/sample-report/).
 
 ## Tests
 
