@@ -64,6 +64,17 @@ profe loop assignments/course-enrollment --app ./my-app --agent "claude -p --per
 - **Kane's own words in the feedback:** the failing step, Kane's reason, the values it read on the page (`final_state`), and the public Test Manager link to the run.
 - **Calibration with known answers** before any student is graded.
 
+Every criterion in the report links to its run in Test Manager. The share links open without an account and show each step, each assertion and an autoplay of the screenshots.
+
+## Kane caught Profe's own bugs
+
+Profe was built with Claude Code, with Kane running against the real thing at every step. Its first calibration said "Calibrated". Kane's evidence packs then showed two flaky tests that would each have cost some student a point:
+
+- a console check that counted a missing favicon as a JavaScript error;
+- a step whose precondition Kane re-verified after the click.
+
+Profe now refuses to grade until the reference solution and every mutant behave exactly as expected. The full story, with commits, is in [docs/BUILD-LOG.md](docs/BUILD-LOG.md).
+
 ## Fairness rules
 
 1. **Only a real pass or a real fail counts.** A test that could not run (the app was down, the browser crashed) is marked *unverified*. It never costs points, and it sends the grade to the teacher.
