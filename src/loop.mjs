@@ -22,12 +22,21 @@ export function agentPrompt() {
   ].join(' ');
 }
 
+// The agent is a fresh process of its own: when Profe itself runs inside a
+// coding-agent session, that session's identity must not leak into the
+// student's agent.
+export function agentEnv(env = process.env) {
+  return Object.fromEntries(
+    Object.entries(env).filter(([key]) => !/^(CLAUDECODE|CLAUDE_CODE_|CLAUDE_JOB_DIR|CLAUDE_PID|CLAUDE_EFFORT)/.test(key)),
+  );
+}
+
 export function runAgent({ command, cwd, prompt, timeoutSec = 900 }) {
   const [cmd, ...args] = command.trim().split(/\s+/);
   return new Promise((resolveRun) => {
     const started = Date.now();
     let output = '';
-    const child = spawn(cmd, [...args, prompt], { cwd, stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
+    const child = spawn(cmd, [...args, prompt], { cwd, stdio: ['ignore', 'pipe', 'pipe'], env: agentEnv() });
     const timer = setTimeout(() => child.kill('SIGTERM'), timeoutSec * 1000);
     const collect = (chunk) => {
       output += chunk;

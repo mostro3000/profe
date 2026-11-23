@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { loadAssignment, resolveSubmission } from '../src/assignment.mjs';
-import { agentPrompt, closedLoop, renderLoopTranscript } from '../src/loop.mjs';
+import { agentEnv, agentPrompt, closedLoop, renderLoopTranscript } from '../src/loop.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const rubric = loadAssignment(join(root, 'assignments', 'course-enrollment'));
@@ -67,6 +67,11 @@ test('the loop stops after the last allowed round', async () => {
   });
   assert.equal(loop.ok, false);
   assert.equal(loop.rounds.length, 2);
+});
+
+test('the agent runs without the parent coding-agent session variables', () => {
+  const env = agentEnv({ PATH: '/bin', HOME: '/home/x', CLAUDECODE: '1', CLAUDE_CODE_SESSION_ID: 's', CLAUDE_JOB_DIR: '/j', ANTHROPIC_API_KEY: 'k' });
+  assert.deepEqual(Object.keys(env).sort(), ['ANTHROPIC_API_KEY', 'HOME', 'PATH']);
 });
 
 test('the agent prompt points at the feedback and keeps the grader out of the agent', () => {

@@ -44,6 +44,7 @@ test('workspace copies tests and puts the student name in each title', () => {
 });
 
 test('grades a submission: failed criteria cost points, with the failing step named', async () => {
+  assert.deepEqual(rubric.criteria.find((c) => c.id === 'AC2').steps, ['Check the starting seats', 'Enroll in Operating Systems', 'Check the result']);
   const workRoot = scenario({
     bruno: {
       'ac3_no_duplicates_test.md': { status: 'failed', message: 'Button still reads "Enroll"', step_index: 3 },

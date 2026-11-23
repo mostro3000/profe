@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course Enrollment</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f3f4f7;
+    color: #1d2330;
+    line-height: 1.4;
+  }
+  header {
+    background: #1f3a5f;
+    color: #fff;
+    padding: 1rem 1.5rem;
+  }
+  header h1 { margin: 0; font-size: 1.4rem; }
+  main {
+    max-width: 1000px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    main { grid-template-columns: 1fr; }
+  }
+  section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  h2 { margin: 0 0 0.75rem; font-size: 1.15rem; }
+  #search {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    font-size: 1rem;
+    border: 1px solid #c4c9d4;
+    border-radius: 6px;
+    margin-bottom: 0.9rem;
+  }
+  #search:focus { outline: 2px solid #3b6ea8; border-color: transparent; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #e6e8ee;
+  }
+  li.item:last-child { border-bottom: none; }
+  .info h3 { margin: 0 0 0.15rem; font-size: 1rem; }
+  .meta { margin: 0; font-size: 0.875rem; color: #5b6475; }
+  .badge {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: #fde2e1;
+    color: #a01d1d;
+    font-size: 0.75rem;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+  button {
+    padding: 0.45rem 0.9rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: #2f6fb3;
+    color: #fff;
+    white-space: nowrap;
+  }
+  button:hover:not(:disabled) { background: #245a94; }
+  button:disabled { background: #b9c0cc; cursor: not-allowed; }
+  button.drop { background: #b5473c; }
+  button.drop:hover { background: #963a31; }
+  #message {
+    min-height: 1.4rem;
+    margin: 0 0 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+  #message:empty { display: none; }
+  #message.error { background: #fde2e1; color: #8a1c1c; }
+  #message.success { background: #dcf3e3; color: #1d6b3a; }
+  .empty { color: #5b6475; font-size: 0.9rem; margin: 0.5rem 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Course Enrollment</h1>
+</header>
+
+<main>
+  <section id="catalog-section">
+    <h2>Course catalog</h2>
+    <p id="message" role="status" aria-live="polite"></p>
+    <input id="search" type="search" placeholder="Search courses" aria-label="Search courses" autocomplete="off">
+    <ul id="catalog"></ul>
+    <p id="no-results" class="empty" hidden>No courses match your search.</p>
+  </section>
+
+  <section id="mine-section">
+    <h2>My courses</h2>
+    <ul id="mine"></ul>
+    <p id="no-mine" class="empty">You are not enrolled in any course yet.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "course-enrollment.v1";
+
+  // Each course: id, name, day, start/end hour (24h), initial seats.
+  var COURSES = [
+    { id: "prog1",  name: "Programming I",        day: "Mon", start: 8,  end: 10, seats: 3 },
+    { id: "db",     name: "Databases",            day: "Mon", start: 9,  end: 11, seats: 2 },
+    { id: "net",    name: "Computer Networks",    day: "Tue", start: 14, end: 16, seats: 1 },
+    { id: "os",     name: "Operating Systems",    day: "Wed", start: 10, end: 12, seats: 4 },
+    { id: "se",     name: "Software Engineering", day: "Thu", start: 16, end: 18, seats: 0 },
+    { id: "web",    name: "Web Development",      day: "Fri", start: 18, end: 20, seats: 5 }
+  ];
+
+  var state = load();
+
+  var els = {
+    catalog: document.getElementById("catalog"),
+    mine: document.getElementById("mine"),
+    search: document.getElementById("search"),
+    message: document.getElementById("message"),
+    noResults: document.getElementById("no-results"),
+    noMine: document.getElementById("no-mine")
+  };
+
+  function byId(id) {
+    for (var i = 0; i < COURSES.length; i++) {
+      if (COURSES[i].id === id) return COURSES[i];
+    }
+    return null;
+  }
+
+  function pad(n) {
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  function scheduleText(c) {
+    return c.day + " " + pad(c.start) + ":00\u2013" + pad(c.end) + ":00";
+  }
+
+  // Two courses clash when they meet on the same day and their time ranges overlap.
+  function overlaps(a, b) {
+    return a.day === b.day && a.start < b.end && b.start < a.end;
+  }
+
+  function defaultState() {
+    var s = { seats: {}, enrolled: [] };
+    COURSES.forEach(function (c) { s.seats[c.id] = c.seats; });
+    return s;
+  }
+
+  function load() {
+    var s = defaultState();
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return s;
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== "object") return s;
+
+      if (Array.isArray(data.enrolled)) {
+        var seen = {};
+        s.enrolled = data.enrolled.filter(function (id) {
+          if (typeof id !== "string" || seen[id] || !byId(id)) return false;
+          seen[id] = true;
+          return true;
+        });
+      }
+      if (data.seats && typeof data.seats === "object") {
+        COURSES.forEach(function (c) {
+          var v = data.seats[c.id];
+          if (typeof v === "number" && isFinite(v) && v >= 0 && Math.floor(v) === v) {
+            s.seats[c.id] = v;
+          }
+        });
+      }
+    } catch (e) {
+      // Corrupt or unavailable storage: fall back to the default state.
+      return defaultState();
+    }
+    return s;
+  }
+
+  function save() {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      // Storage unavailable (e.g. private mode quota): keep working in memory.
+    }
+  }
+
+  function isEnrolled(id) {
+    return state.enrolled.indexOf(id) !== -1;
+  }
+
+  function showMessage(text, kind) {
+    els.message.textContent = text;
+    els.message.className = kind || "";
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function enroll(id) {
+    var c = byId(id);
+    if (!c) return;
+
+    if (isEnrolled(id)) {
+      showMessage("You are already enrolled in " + c.name + ".", "error");
+      return;
+    }
+    if (state.seats[id] <= 0) {
+      showMessage(c.name + " is full. No seats are available.", "error");
+      return;
+    }
+
+    var clash = null;
+    for (var i = 0; i < state.enrolled.length; i++) {
+      var other = byId(state.enrolled[i]);
+      if (other && overlaps(other, c)) {
+        clash = other;
+        break;
+      }
+    }
+    if (clash) {
+      showMessage(
+        "Schedule clash: " + c.name + " (" + scheduleText(c) + ") overlaps with " +
+        clash.name + " (" + scheduleText(clash) + "). Enrollment was not changed.",
+        "error"
+      );
+      return;
+    }
+
+    state.seats[id] -= 1;
+    state.enrolled.push(id);
+    save();
+    render();
+    showMessage("Enrolled in " + c.name + ".", "success");
+  }
+
+  function drop(id) {
+    var c = byId(id);
+    if (!c) return;
+    var idx = state.enrolled.indexOf(id);
+    if (idx === -1) return;
+
+    state.enrolled.splice(idx, 1);
+    state.seats[id] += 1;
+    save();
+    render();
+    showMessage("Dropped " + c.name + ". Its seat has been released.", "success");
+  }
+
+  function renderCatalog() {
+    var query = els.search.value.trim().toLowerCase();
+    var visible = COURSES.filter(function (c) {
+      return c.name.toLowerCase().indexOf(query) !== -1;
+    });
+
+    els.catalog.textContent = "";
+    visible.forEach(function (c) {
+      var li = el("li", "item");
+
+      var info = el("div", "info");
+      var title = el("h3", null, c.name);
+      if (state.seats[c.id] === 0) {
+        title.appendChild(el("span", "badge", "Full"));
+      }
+      info.appendChild(title);
+      info.appendChild(el("p", "meta", "Schedule: " + scheduleText(c)));
+      info.appendChild(el("p", "meta", "Available seats: " + state.seats[c.id]));
+
+      var btn = el("button", null, isEnrolled(c.id) ? "Enrolled" : "Enroll");
+      btn.type = "button";
+      if (isEnrolled(c.id)) {
+        btn.disabled = true;
+      } else if (state.seats[c.id] <= 0) {
+        btn.disabled = true;
+      } else {
+        btn.addEventListener("click", function () { enroll(c.id); });
+      }
+
+      li.appendChild(info);
+      li.appendChild(btn);
+      els.catalog.appendChild(li);
+    });
+
+    els.noResults.hidden = visible.length !== 0;
+  }
+
+  function renderMine() {
+    els.mine.textContent = "";
+    state.enrolled.forEach(function (id) {
+      var c = byId(id);
+      if (!c) return;
+
+      var li = el("li", "item");
+      var info = el("div", "info");
+      info.appendChild(el("h3", null, c.name));
+      info.appendChild(el("p", "meta", "Schedule: " + scheduleText(c)));
+
+      var btn = el("button", "drop", "Drop");
+      btn.type = "button";
+      btn.addEventListener("click", function () { drop(c.id); });
+
+      li.appendChild(info);
+      li.appendChild(btn);
+      els.mine.appendChild(li);
+    });
+
+    els.noMine.hidden = state.enrolled.length !== 0;
+  }
+
+  function render() {
+    renderCatalog();
+    renderMine();
+  }
+
+  els.search.addEventListener("input", renderCatalog);
+
+  render();
+})();
+</script>
+</body>
+</html>
