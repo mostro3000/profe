@@ -35,8 +35,9 @@ Usage
   profe demo                               Calibrate, then grade the example submissions.
 
 Common options
-  --parallel <n>      Chrome workers per submission (default 3)
-  --concurrency <n>   Submissions graded at the same time (default 2)
+  --parallel <n>      Chrome workers per submission (default 3). Submissions themselves are
+                      graded one at a time: two kane-cli testruns on one machine share
+                      Chrome's DevTools ports and drive each other's browsers.
   --timeout <s>       Give up on a submission after this many seconds (default 1800)
   --headed            Show the browser windows
   --work <dir>        Where per-submission Kane workspaces live (default .profe/work)
@@ -92,7 +93,6 @@ function options(flags) {
   return {
     workRoot: resolve(flags.work ?? '.profe/work'),
     parallel: positiveInt(flags.parallel, 3),
-    concurrency: positiveInt(flags.concurrency, 2),
     timeoutSec: positiveInt(flags.timeout, 1800),
     headless: !flags.headed,
     onProgress: printProgress,

@@ -218,8 +218,13 @@ function describeRunFailure(run, kane) {
   return parts.length ? parts.join(' · ') : `kane-cli exited with code ${run.exitCode} before running any test`;
 }
 
-export async function gradeAll({ submissions, concurrency = 2, ...options }) {
-  return mapLimit(submissions, concurrency, (submission) => gradeSubmission({ ...options, submission }));
+// Submissions are graded one at a time. Two kane-cli testrun processes on one
+// machine launch Chrome on the same DevTools port range (9222–9230) and end up
+// driving each other's browsers. We saw a test start on one student's app and
+// finish on another's. Parallelism lives inside each testrun (--parallel),
+// where Kane coordinates its own workers.
+export async function gradeAll({ submissions, ...options }) {
+  return mapLimit(submissions, 1, (submission) => gradeSubmission({ ...options, submission }));
 }
 
 // "Who grades the grader?" A rubric is calibrated when:
@@ -229,7 +234,7 @@ export async function gradeAll({ submissions, concurrency = 2, ...options }) {
 // - and each mutant passes every other criterion, unless the rubric lists it
 //   under mayAlsoFail (a test that fails a nearly-correct app is flaky or
 //   over-strict, and would cost some student a point).
-export async function calibrate({ rubric, concurrency = 2, ...options }) {
+export async function calibrate({ rubric, ...options }) {
   const calibration = rubric.calibration ?? {};
   if (!calibration.reference) throw new Error(`${rubric.id}: rubric.json has no calibration.reference`);
   const jobs = [
@@ -250,7 +255,8 @@ export async function calibrate({ rubric, concurrency = 2, ...options }) {
       },
     })),
   ];
-  const runs = await mapLimit(jobs, concurrency, async (job) => ({
+  // One testrun at a time, for the reason given above gradeAll.
+  const runs = await mapLimit(jobs, 1, async (job) => ({
     role: job.role,
     mustFail: job.mustFail,
     mayAlsoFail: job.mayAlsoFail ?? [],
