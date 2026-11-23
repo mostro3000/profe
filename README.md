@@ -8,6 +8,8 @@ Profe turns an assignment's acceptance criteria into plain-English [Kane CLI](ht
 
 **Live sample report: https://mostro3000.github.io/profe/** (the dashboard from grading the example class below).
 
+![The Profe dashboard: five students × nine criteria, each cell a real-browser Kane run, with proposed and final grades and teacher approval](docs/images/dashboard.png)
+
 ```text
 assignment.md ─► rubric.json + tests/ac*_test.md   (one plain-English Kane test per criterion)
                       │
@@ -68,6 +70,12 @@ We recorded the loop with two different agents, and each fixed exactly the bugs 
 
 The transcripts, diffs and fixed apps are in [`docs/agent-loop/`](docs/agent-loop/README.md). The Codex command above shows the shape of the call; Codex was not run.
 
+![profe loop with Muse on Diego's app: round 0 fails AC5 and AC9, Muse fixes both in 36 seconds, round 1 passes 9/9](docs/images/terminal-loop-muse.png)
+
+After Muse's fix, Kane's replay of AC9 shows the same flow passing its console check: no uncaught exceptions.
+
+![Kane's public replay of AC9 after Muse's fix: enroll, drop, search, then "Assertion True" on the uncaught-exceptions check](docs/images/kane-replay-after-muse-fix.png)
+
 ## How Profe uses Kane CLI
 
 - **One `kane-cli testrun run` per submission** over the assignment's `_test.md` files, with `--override-start-url` pointing at that student's app. Kane gives each criterion its own isolated Chrome and seals one evidence pack for the whole submission.
@@ -78,7 +86,9 @@ The transcripts, diffs and fixed apps are in [`docs/agent-loop/`](docs/agent-loo
 - **Calibration with known answers** before any student is graded.
 - **Kane checks Profe itself.** `npm run selftest` serves a generated report and runs [`selftest/dashboard_test.md`](selftest/dashboard_test.md): the grades table, opening the evidence for a failed criterion, export refused until a grade is approved, then approve and export. It passes: [watch the replay](https://test-manager.lambdatest.com/projects/01M84JGRMYEEY6EAEDA44D61YJ/test-cases/01M84R323W1SKYSK3QM8P5RH6E/dashboard/share/US_HWABAVWRJBXHV40Q8TQL5FE6UM6PN5DZ2FYVLJXFEZCS8KGA0D9M7FZBZWR7N5SJ?type=summary&agentView=true&fqdn=summary-page).
 
-Every criterion in the report links to its run in Test Manager. The share links open without an account and show each step, each assertion and an autoplay of the screenshots.
+Every criterion in the report links to its test case in Test Manager. The share page opens without an account and replays the test case's latest run: each step, each assertion and an autoplay of the screenshots. That is why `profe loop` grades in a workspace of its own, so the loop's runs never become the latest version of a class's test cases.
+
+![Kane's public replay of Diego's AC9: enroll, drop and search, then the uncaught-exceptions check fails](docs/images/kane-replay-diego-ac9.png)
 
 ## Kane caught Profe's own bugs
 
@@ -89,6 +99,8 @@ Profe was built with Claude Code, with Kane running against the real thing at ev
 - two students graded at once, where a test started on one student's app and, according to Kane's `final_state.url`, finished on the other's.
 
 Each of these would have cost some student a point. Profe now refuses to grade until the reference solution and every mutant behave exactly as expected, and it runs one submission at a time. The full story, with commits, is in [docs/BUILD-LOG.md](docs/BUILD-LOG.md).
+
+![profe calibrate --fresh: the reference passes 9/9, each mutant fails only the criterion it breaks, "Calibrated"](docs/images/terminal-calibrate.png)
 
 ## Fairness rules
 
@@ -124,6 +136,10 @@ Run `profe calibrate assignments/<id>` until it says "Calibrated", then grade.
 | Sofi | 10 | none | built in one shot by Claude Haiku 5.5: no failures found |
 
 Kane's verdicts matched the answer key exactly: all six seeded bugs were caught, there were no false failures across 45 checks, and no check needed a retry. The whole report is live at https://mostro3000.github.io/profe/, with its source in [`docs/sample-report/`](docs/sample-report/).
+
+Diego's AC9 is the bug a screenshot never shows. His page looks right after a Drop, but Kane's console check caught the exception:
+
+![Diego's evidence in the dashboard: AC5 and AC9 failed, with what Kane saw and Kane's diagnosis labeled as a hypothesis](docs/images/evidence-diego-ac9.png)
 
 ## Tests
 

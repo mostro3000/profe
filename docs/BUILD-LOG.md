@@ -105,6 +105,12 @@ Every verdict was right. One diagnosis was not. For Diego's AC5, Kane blamed "th
 
 The evidence packs contain the grader's TestMu account details: the account email and organization id in `result.yaml`, and the profile in the logs. Profe's report says so, and the sample report in this repo ships without packs. The public Test Manager replays carry no account email.
 
+### Replay links show a test case's latest version
+
+Taking screenshots for this README, the public replay of Diego's AC9 showed "Assertion True". That was the run after Muse's fix, not the failing run the report describes. The loops had graded in the class's own workspaces, so Kane added their runs as new versions of the same Test Manager test cases, and a share link always shows the latest version.
+
+`profe loop` now grades in a workspace of its own (`<student>-loop`). Bruno and Diego were graded again in fresh workspaces, so the report's links once more replay the runs its verdicts describe.
+
 ## 6. Lessons, now built into Profe
 
 1. A grader needs a grader. The reference solution alone would not have caught either flaky test; strict mutants did.
@@ -113,3 +119,4 @@ The evidence packs contain the grader's TestMu account details: the account emai
 4. Check where the browser actually was. Kane's `final_state.url` caught a cross-talk bug that no assertion would have.
 5. A passing replay is not proof of an action. After an infrastructure incident, re-author (`--fresh`) instead of trusting old recordings.
 6. Trust the verdict, check the diagnosis. Show students what failed and what was read on the page; present the root-cause story as a hypothesis.
+7. Evidence links must stay true after the fact. Keep every kind of run (class grading, a student's loop) in its own workspace, so no later run rewrites what an earlier report links to.

@@ -20,7 +20,7 @@ function setup() {
   writeFileSync(
     scenarioFile,
     JSON.stringify({
-      bruno: {
+      'bruno-loop': {
         'ac3_no_duplicates_test.md': { status: 'failed', message: 'Button still reads "Enroll"', step_index: 3 },
         'ac6_drop_test.md': { status: 'failed', message: 'Catalog shows 0 seats, expected 1', step_index: 3 },
       },
@@ -50,6 +50,8 @@ test('the loop grades, hands the feedback to the agent, and re-grades until ever
   assert.equal(loop.rounds[1].grade, 10);
   assert.deepEqual(events, ['graded', 'agent-start', 'agent-end', 'graded']);
   assert.ok(existsSync(join(app, 'ASSIGNMENT.md')), 'the agent gets the assignment next to the app');
+  assert.ok(existsSync(join(base, 'work', 'course-enrollment', 'bruno-loop')), 'the loop has its own Kane workspace');
+  assert.ok(!existsSync(join(base, 'work', 'course-enrollment', 'bruno')), "the class grading's workspace is untouched");
   assert.match(readFileSync(join(app, 'profe-feedback.md'), 'utf8'), /Every criterion passed/);
   const transcript = renderLoopTranscript(rubric, loop);
   assert.match(transcript, /\| 0 \| 7\.8 \| 7\/9 \| AC3, AC6 \|/);
