@@ -68,12 +68,13 @@ Every criterion in the report links to its run in Test Manager. The share links 
 
 ## Kane caught Profe's own bugs
 
-Profe was built with Claude Code, with Kane running against the real thing at every step. Its first calibration said "Calibrated". Kane's evidence packs then showed two flaky tests that would each have cost some student a point:
+Profe was built with Claude Code, with Kane running against the real thing at every step. Its first calibration said "Calibrated". Kane's evidence then showed:
 
 - a console check that counted a missing favicon as a JavaScript error;
-- a step whose precondition Kane re-verified after the click.
+- a step whose precondition Kane re-verified after the click;
+- two students graded at once, where a test started on one student's app and, according to Kane's `final_state.url`, finished on the other's.
 
-Profe now refuses to grade until the reference solution and every mutant behave exactly as expected. The full story, with commits, is in [docs/BUILD-LOG.md](docs/BUILD-LOG.md).
+Each of these would have cost some student a point. Profe now refuses to grade until the reference solution and every mutant behave exactly as expected, and it runs one submission at a time. The full story, with commits, is in [docs/BUILD-LOG.md](docs/BUILD-LOG.md).
 
 ## Fairness rules
 

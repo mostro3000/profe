@@ -51,8 +51,22 @@ Known bugs caught:  2/2
 
 The three calibrations cost about 830 credits in total. The result is in [`assignments/course-enrollment/calibration.json`](../assignments/course-enrollment/calibration.json).
 
-## 4. Lessons, now built into Profe
+## 4. Two students at once: one test started on Bruno's app and finished on Carla's
+
+The first full grading ran two submissions at a time. Bruno's AC2 failed with "Operating Systems is already enrolled; its catalog control is disabled and labeled Enrolled", which is impossible in Bruno's code: his seeded bug is that the button never says "Enrolled". The test's own event log explained it:
+
+```text
+step 1 · navigate: Navigate to http://127.0.0.1:43173/                  ← Bruno's app
+run_end · final_state: { "url": "http://127.0.0.1:35501/", … }          ← Carla's app
+```
+
+Two `kane-cli testrun` processes on one machine launch Chrome on the same DevTools port range (9222–9230) and end up attached to each other's browsers. The same cross-talk explains the `TargetClosedError`s seen while calibrating with concurrency above 1. The very first single-process run had none.
+
+The run was stopped, its workspaces deleted, and Profe now runs one `testrun` at a time (commit `7cca3dd`). Parallelism stays inside each testrun (`--parallel`), where Kane coordinates its own workers. Calibration was then re-validated sequentially.
+
+## 5. Lessons, now built into Profe
 
 1. A grader needs a grader. The reference solution alone would not have caught either flaky test; strict mutants did.
 2. "Failed" from a browser agent is not always the student's failure. Read why it failed before taking points away.
 3. Put a precondition in its own step. Kane re-verifies each step's whole objective when the step ends.
+4. Check where the browser actually was. Kane's `final_state.url` caught a cross-talk bug that no assertion would have.
