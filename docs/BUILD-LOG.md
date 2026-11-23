@@ -17,7 +17,7 @@ The first `profe calibrate` (reference + two mutants) printed **✓ Calibrated**
 - **AC9 failed on the case-sensitive-search mutant, which throws nothing.** The evidence pack's `logs/0-console.ndjson` had a single entry: `Failed to load resource: 404` for `/favicon.ico`. The run log showed that Kane's console analyzer had generated `return len(console.errors()) > 0`, which counts any console error, not uncaught exceptions. On the reference run it had happened to pass. That is a flaky test, and it would have cost some student a point.
 - **AC2 and AC3 "failed" on both mutants with `TargetClosedError: … browser has been closed`.** Nine Chromes were running at once. Those are harness errors, not student mistakes, and they were about to be graded as fails.
 
-Changes (commit `7ebbdb5`):
+Changes (commit `df4184d`):
 
 - AC9 now asks explicitly for uncaught exceptions (`is_exception`), and Profe's local server answers `/favicon.ico` with a quiet 204.
 - Harness errors that Kane reports as failures (`TargetClosedError`, `net::ERR_*`, CDP errors) count as **unverified**. They are retried once and never cost points.
@@ -33,7 +33,7 @@ The strict re-run recovered both harness errors on retry (AC9 on the reference, 
       Kane: Final verification failed: "the course "Operating Systems" shows 4 available seats"
 ```
 
-AC2's first step said "verify Operating Systems shows 4 seats, then click its Enroll button". Kane's final verification re-checks the whole objective after the step, when the course already shows 3 seats. The precondition now has its own step (commit `ba1b9a2`). The other eight tests only assert after they act, so none of them has this pattern.
+AC2's first step said "verify Operating Systems shows 4 seats, then click its Enroll button". Kane's final verification re-checks the whole objective after the step, when the course already shows 3 seats. The precondition now has its own step (commit `25cb65c`). The other eight tests only assert after they act, so none of them has this pattern.
 
 The third calibration, with both fixes, came back clean and needed no retries:
 
@@ -62,7 +62,7 @@ run_end · final_state: { "url": "http://127.0.0.1:35501/", … }          ← C
 
 Two `kane-cli testrun` processes on one machine launch Chrome on the same DevTools port range (9222–9230) and end up attached to each other's browsers. The same cross-talk explains the `TargetClosedError`s seen while calibrating with concurrency above 1. The very first single-process run had none.
 
-The run was stopped, its workspaces deleted, and Profe now runs one `testrun` at a time (commit `7cca3dd`). Parallelism stays inside each testrun (`--parallel`), where Kane coordinates its own workers.
+The run was stopped, its workspaces deleted, and Profe now runs one `testrun` at a time (commit `04d5f41`). Parallelism stays inside each testrun (`--parallel`), where Kane coordinates its own workers.
 
 ### The cross-talk had also left a poisoned recording behind
 
