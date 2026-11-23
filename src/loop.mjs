@@ -80,6 +80,11 @@ export async function closedLoop({
 }) {
   if (!submission.dir) throw new Error('profe loop needs a local app folder (the agent edits files there)');
   const appDir = submission.dir;
+  // The loop gets its own Kane workspace, and so its own Test Manager test
+  // cases. Reusing the class grading's workspace would add the loop's runs as
+  // new versions of the class's test cases, and the report's replay links
+  // (which show a test case's latest version) would stop matching its verdicts.
+  const graded = { ...submission, slug: `${submission.slug ?? 'submission'}-loop` };
   const assignmentCopy = join(appDir, 'ASSIGNMENT.md');
   if (!existsSync(assignmentCopy) && existsSync(join(rubric.dir, 'assignment.md'))) {
     copyFileSync(join(rubric.dir, 'assignment.md'), assignmentCopy);
@@ -87,7 +92,7 @@ export async function closedLoop({
 
   const rounds = [];
   for (let round = 0; ; round++) {
-    const result = await gradeSubmission({ ...gradeOptions, rubric, submission });
+    const result = await gradeSubmission({ ...gradeOptions, rubric, submission: graded });
     writeFileSync(join(appDir, 'profe-feedback.md'), renderFeedback(rubric, result, { checkCommand: 'profe check (run by Profe between rounds)' }));
     const failed = result.criteria.filter((c) => c.status === 'failed').map((c) => c.id);
     const entry = {
