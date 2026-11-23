@@ -49,6 +49,7 @@ export async function gradeSubmission({
   headless = true,
   timeoutSec = 1800,
   retries = 1,
+  fresh = false,
   onProgress = () => {},
 }) {
   const label = submission.student;
@@ -81,6 +82,8 @@ export async function gradeSubmission({
         parallel,
         headless,
         timeoutSec,
+        // --fresh: ignore recordings and author every step again (Kane's --author).
+        extraArgs: fresh ? ['--author'] : [],
         onEvent: (event) => {
           if (event.type !== 'testrun_member_end' && event.type !== 'testrun_authored_member_end') return;
           const criterion = byFile.get(basename(event.path));

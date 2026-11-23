@@ -131,6 +131,13 @@ test('a harness error that persists is unverified, never a fail', async () => {
   assert.equal(result.needsReview, true);
 });
 
+test('--fresh asks Kane to author every step again', async () => {
+  const workRoot = scenario({});
+  const submission = resolveSubmission({ student: 'Elena', app: join(root, 'examples', 'submissions', 'elena') });
+  const result = await gradeSubmission({ rubric, submission, workRoot, fresh: true });
+  assert.ok(existsSync(join(result.workDir, '.fake-author-flag')), 'testrun received --author');
+});
+
 test('classify: only an assertion failure is a fail', () => {
   assert.equal(classify('failed', 'Checkpoint assertion failed: "the page shows a message"'), 'failed');
   assert.equal(classify('failed', CLOSED), 'unverified');

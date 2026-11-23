@@ -7,7 +7,7 @@ import { closedLoop, renderLoopTranscript } from './loop.mjs';
 import { renderFeedback, renderHtml, summarizeCalibration, writeReport } from './report.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BOOLEAN_FLAGS = new Set(['headed', 'force', 'help', 'commit']);
+const BOOLEAN_FLAGS = new Set(['headed', 'force', 'help', 'commit', 'fresh']);
 
 const HELP = `Profe: the teaching assistant that actually runs your students' apps.
 
@@ -39,6 +39,8 @@ Common options
                       graded one at a time: two kane-cli testruns on one machine share
                       Chrome's DevTools ports and drive each other's browsers.
   --timeout <s>       Give up on a submission after this many seconds (default 1800)
+  --fresh             Author every test step again instead of replaying recordings
+                      (use after an infrastructure incident, or when in doubt)
   --headed            Show the browser windows
   --work <dir>        Where per-submission Kane workspaces live (default .profe/work)
 
@@ -95,6 +97,7 @@ function options(flags) {
     parallel: positiveInt(flags.parallel, 3),
     timeoutSec: positiveInt(flags.timeout, 1800),
     headless: !flags.headed,
+    fresh: Boolean(flags.fresh),
     onProgress: printProgress,
   };
 }

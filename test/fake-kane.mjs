@@ -21,6 +21,8 @@ for (let i = 2; i < args.length; i++) {
   else if (args[i] === '--parallel') i++;
   else if (!args[i].startsWith('--')) files.push(args[i]);
 }
+// Record whether Profe asked for a fresh authoring pass (profe --fresh).
+if (args.includes('--author')) writeFileSync('.fake-author-flag', '1');
 
 const emit = (event) => process.stdout.write(`${JSON.stringify({ ...event, v: 1, ts: new Date().toISOString() })}\n`);
 const slug = basename(process.cwd());
